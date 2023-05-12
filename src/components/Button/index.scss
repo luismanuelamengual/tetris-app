@@ -1,0 +1,43 @@
+.button {
+  display: block;
+  background-color: white;
+  border-radius: 8px;
+  width: 100%;
+  flex-shrink: 0;
+  max-width: 600px;
+  line-height: 40px;
+  font-size: 24px;
+  margin: 0 auto 20px auto;
+  border: 2px solid;
+  -webkit-user-select: none; 
+  -ms-user-select: none; 
+  user-select: none;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-family: 'Sigmar One';
+  cursor: pointer;
+
+  &.button-disabled {
+    opacity: 0.2;
+    cursor: not-allowed;
+  }
+
+  &.button-normal {
+    color: deepskyblue;
+
+    &:hover {
+      background-color: #f5f9ff;
+    }
+  }
+
+  &.button-primary {
+    color: white;
+    background-color: deepskyblue;
+    border-color: #2b91c2;
+
+    &:hover {
+      background-color: #69c8f5;
+    }
+  }
+}
