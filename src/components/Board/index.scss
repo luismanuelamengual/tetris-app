@@ -1,0 +1,39 @@
+$backgroundColor: black;
+
+.board {
+  position: relative;
+  border: 2px solid red;
+  box-sizing: border-box;
+  background-color: $backgroundColor;
+  overflow: hidden;
+  width: 300px;
+  aspect-ratio: 0.5;
+  
+  * {
+    box-sizing: border-box;
+  }
+
+  .block {
+    position: absolute;
+    width: 10%;
+    height: 5%;
+    background-color: red;
+
+    @for $x from 1 through 10 {
+      &.block-x-#{$x} {
+        left: percentage(($x - 1) / 10);
+      }
+    }
+
+    @for $y from 1 through 20 {
+      &.block-y-#{$y} {
+        top: percentage(((20 - $y)) / 20);
+      }
+    }
+
+    &.block-x-10 {
+      width: unset;
+      right: 0;
+    }
+  }
+}
