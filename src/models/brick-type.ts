@@ -1,9 +1,9 @@
 export enum BrickType {
-  CYAN,
-  BLUE,
-  ORANGE,
-  YELLOW,
-  GREEN,
-  PURPLE,
-  RED
+  CYAN = 'cyan',
+  BLUE = 'blue',
+  ORANGE = 'orange',
+  YELLOW = 'yellow',
+  GREEN = 'green',
+  PURPLE = 'purple',
+  RED = 'red'
 }
