@@ -1,6 +1,6 @@
 $backgroundColor: black;
 
-.board {
+.tetris-board {
   position: relative;
   border: 2px solid red;
   box-sizing: border-box;
@@ -26,8 +26,8 @@ $backgroundColor: black;
   
     @for $y from 1 through 20 {
       &.y#{$y} {
-        top: percentage(((20 - $y)) / 20);
-        bottom: percentage((20 - (20 - $y + 1)) / 20);
+        top: percentage((($y - 1)) / 20);
+        bottom: percentage((20 - $y) / 20);
       }
     }
   } 

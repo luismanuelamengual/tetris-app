@@ -9,7 +9,7 @@ export function Board({ className = '' }: Props) {
 
 
   return <div className={classNames({
-    'board': true,
+    'tetris-board': true,
     [className]: !!className
   })}>
     <div className='piece'>
@@ -17,10 +17,6 @@ export function Board({ className = '' }: Props) {
       <div className='brick x5 y5' />
       <div className='brick x5 y4' />
       <div className='brick x6 y4' />
-
-
-
-      <div className='brick x1 y1' />
     </div>
   </div>;
 }
