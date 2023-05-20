@@ -12,6 +12,15 @@ export function Board({ className = '' }: Props) {
     'board': true,
     [className]: !!className
   })}>
-    <div className='block block-x-10 block-y-1' />
+    <div className='piece'>
+      <div className='brick x4 y5' />
+      <div className='brick x5 y5' />
+      <div className='brick x5 y4' />
+      <div className='brick x6 y4' />
+
+
+
+      <div className='brick x1 y1' />
+    </div>
   </div>;
 }

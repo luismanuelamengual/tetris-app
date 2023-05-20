@@ -13,27 +13,22 @@ $backgroundColor: black;
     box-sizing: border-box;
   }
 
-  .block {
+  .brick {
     position: absolute;
-    width: 10%;
-    height: 5%;
-    background-color: red;
+    background-color: red; 
 
     @for $x from 1 through 10 {
-      &.block-x-#{$x} {
+      &.x#{$x} {
         left: percentage(($x - 1) / 10);
+        right: percentage((10 - $x) / 10);
       }
     }
-
+  
     @for $y from 1 through 20 {
-      &.block-y-#{$y} {
+      &.y#{$y} {
         top: percentage(((20 - $y)) / 20);
+        bottom: percentage((20 - (20 - $y + 1)) / 20);
       }
     }
-
-    &.block-x-10 {
-      width: unset;
-      right: 0;
-    }
-  }
+  } 
 }
