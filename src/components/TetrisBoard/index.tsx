@@ -5,7 +5,7 @@ interface Props {
   className?: string;
 };
 
-export function Board({ className = '' }: Props) {
+export function TetrisBoard({ className = '' }: Props) {
 
 
   return <div className={classNames({
