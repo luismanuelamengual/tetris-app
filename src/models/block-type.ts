@@ -1,4 +1,4 @@
-export enum BrickType {
+export enum BlockType {
   I,
   J,
   L,

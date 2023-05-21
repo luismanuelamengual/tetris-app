@@ -1,6 +1,6 @@
-import { BrickType, TetrominoOffsets } from 'models';
+import { BlockType, TetrominoOffsets } from 'models';
 
 export interface TetrominoType {
-  brickType: BrickType;
+  blockType: BlockType;
   shapeOffsets: Array<TetrominoOffsets>;
 }

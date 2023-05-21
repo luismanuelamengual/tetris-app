@@ -1,5 +1,5 @@
-export * from './brick';
-export * from './brick-type';
+export * from './block';
+export * from './block-type';
 export * from './path';
 export * from './tetromino-position';
 export * from './tetrominio-types';

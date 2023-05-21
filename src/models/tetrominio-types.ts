@@ -1,7 +1,7 @@
-import { BrickType, TetrominoType } from 'models';
+import { BlockType, TetrominoType } from 'models';
 
 const ITetrominoType: TetrominoType = {
-  brickType: BrickType.I,
+  blockType: BlockType.I,
   shapeOffsets: [
     [[-1, 0], [0, 0], [1, 0], [2, 0]],
     [[0, -1], [0, 0], [0, 1], [0, 2]]

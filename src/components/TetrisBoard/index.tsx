@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { Brick } from 'models';
+import { Block } from 'models';
 import { useEffect, useState } from 'react';
 import './index.scss';
 
@@ -11,7 +11,7 @@ interface Props {
 };
 
 export function TetrisBoard({ className = '' }: Props) {
-  const [slots, setSlots] = useState<Array<Array<Brick | null>>>();
+  const [slots, setSlots] = useState<Array<Array<Block | null>>>();
 
   useEffect(() => {
     setSlots(Array.from({ length: GRID_ROWS }, () => Array(GRID_COLUMNS).fill(null)));
@@ -23,13 +23,13 @@ export function TetrisBoard({ className = '' }: Props) {
   })}>
     {slots?.map((row, rowIndex) => (
       <>
-        {row.map((brick, colIndex) => brick != null ? (
+        {row.map((block, colIndex) => block != null ? (
           <div className={classNames({
-            'brick': true,
-            [`brick-${brick.type}`]: true,
+            'block': true,
+            [`block-${block.type}`]: true,
             [`x${colIndex + 1}`]: true,
             [`y${rowIndex + 1}`]: true,
-          })} key={brick?.id} />
+          })} key={block?.id} />
         ) : null)}
       </>
     ))}
