@@ -1,41 +1,54 @@
 import classNames from 'classnames';
-import { Block } from 'models';
-import { useEffect, useState } from 'react';
+import { Block, ITetrominoType, Tetromino } from 'models';
+import { useCallback, useEffect, useState } from 'react';
 import './index.scss';
-
-const GRID_ROWS = 20;
-const GRID_COLUMNS = 10;
 
 interface Props {
   className?: string;
 };
 
 export function TetrisBoard({ className = '' }: Props) {
-  const [slots, setSlots] = useState<Array<Array<Block | null>>>();
+  const [blocks] = useState<Array<Block>>([]);
+  const [tetromino, setTetromino] = useState<Tetromino | null>(null);
 
   useEffect(() => {
-    setSlots(Array.from({ length: GRID_ROWS }, () => Array(GRID_COLUMNS).fill(null)));
+    setTetromino({
+      type: ITetrominoType,
+      position: { x: 9, y: 14 },
+      rotationIndex: 1
+    });
   }, []);
 
-  function renderBlocks() {
-    return slots?.map((row, rowIndex) => (
-      <>
-        {row.map((block, colIndex) => block != null ? (
-          <div className={classNames({
-            'block': true,
-            [`block-${block.type}`]: true,
-            [`x${colIndex + 1}`]: true,
-            [`y${rowIndex + 1}`]: true,
-          })} key={block?.id} />
-        ) : null)}
-      </>
-    ));
-  }
+  const renderBlock = (block: Block) => {
+    return (<div className={classNames({
+      'block': true,
+      [`block-${block.type}`]: true,
+      [`x${block.position.x + 1}`]: true,
+      [`y${block.position.y + 1}`]: true,
+    })} key={block.id}/>);
+  };
+
+  const renderBlocks = useCallback(() => {
+    return blocks.map((block) => renderBlock(block));
+  }, [blocks]);
+
+  const renderTetromino = useCallback(() => {
+    if (!tetromino) {
+      return null;
+    }
+    const blockOffsets = tetromino.type.shapeOffsets[tetromino.rotationIndex];
+    return blockOffsets.map(([blockOffsetX, blockOffsetY], index) => renderBlock({
+      id: `tetromino-${index}`,
+      position: { x: tetromino.position.x + blockOffsetX, y: tetromino.position.y + blockOffsetY },
+      type: tetromino.type.blockType
+    }));
+  }, [tetromino]);
 
   return <div className={classNames({
     'tetris-board': true,
     [className]: !!className
   })}>
+    {renderTetromino()}
     {renderBlocks()}
   </div>;
 }

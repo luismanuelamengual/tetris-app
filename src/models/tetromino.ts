@@ -1,7 +1,7 @@
-import { TetrominoPosition, TetrominoType } from 'models';
+import { Position, TetrominoType } from 'models';
 
 export interface Tetromino {
   type: TetrominoType;
-  position: TetrominoPosition;
+  position: Position;
   rotationIndex: number;
 }
