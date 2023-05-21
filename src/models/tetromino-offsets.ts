@@ -1,0 +1,1 @@
+export type TetrominoOffsets = [[number, number], [number, number], [number, number], [number, number]];

@@ -1,14 +1,7 @@
-import { BrickType } from './brick-type';
+import { TetrominoPosition, TetrominoType } from 'models';
 
 export interface Tetromino {
-  brickType: BrickType;
-  shapeOffsets: Array<Array<[number, number]>>;
+  type: TetrominoType;
+  position: TetrominoPosition;
+  rotationIndex: number;
 }
-
-export const ITetromino: Tetromino = {
-  brickType: BrickType.I,
-  shapeOffsets: [
-    [[-1, 0], [0, 0], [1, 0], [2, 0]],
-    [[0, -1], [0, 0], [0, 1], [0, 2]]
-  ]
-};
