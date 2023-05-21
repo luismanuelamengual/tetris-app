@@ -1,9 +1,9 @@
 export enum BlockType {
-  I,
-  J,
-  L,
-  O,
-  S,
-  T,
-  Z
+  I = 'i',
+  J = 'j',
+  L = 'l',
+  O = 'o',
+  S = 's',
+  T = 't',
+  Z = 'z'
 }

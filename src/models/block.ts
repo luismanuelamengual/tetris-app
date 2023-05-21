@@ -1,7 +1,7 @@
 import { BlockType, Position } from 'models';
 
 export interface Block {
-  id: string|number;
+  id: number;
   type: BlockType;
   position: Position;
 }
