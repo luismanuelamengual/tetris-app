@@ -14,8 +14,8 @@ export function TetrisBoard({ className = '' }: Props) {
   useEffect(() => {
     setTetromino({
       type: ITetrominoType,
-      position: { x: 9, y: 14 },
-      rotationIndex: 1
+      position: { x: 4, y: 14 },
+      rotationIndex: 0
     });
   }, []);
 
@@ -36,7 +36,7 @@ export function TetrisBoard({ className = '' }: Props) {
     if (!tetromino) {
       return null;
     }
-    const blockOffsets = tetromino.type.shapeOffsets[tetromino.rotationIndex];
+    const blockOffsets = tetromino.type.shapeOffsets[tetromino.rotationIndex % tetromino.type.shapeOffsets.length];
     return blockOffsets.map(([blockOffsetX, blockOffsetY], index) => renderBlock({
       id: `tetromino-${index}`,
       position: { x: tetromino.position.x + blockOffsetX, y: tetromino.position.y + blockOffsetY },
