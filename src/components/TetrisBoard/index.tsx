@@ -39,6 +39,10 @@ export function TetrisBoard({ className = '' }: Props) {
     }
   }, [tetromino]);
 
+  /*const isAvailableSlot = useCallback(({x, y}: Position): boolean => {
+    return !(x < 0 || x > 9 || y > 19 || blocks.find((block) => x === block.position.x && y === block.position.y) !== undefined);
+  }, [blocks]);*/
+
   const createBlock = useCallback((type: BlockType, position: Position): Block => {
     return { id: blockCounter.current++, position, type };
   }, []);
