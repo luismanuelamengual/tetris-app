@@ -17,11 +17,8 @@ export function TetrisBoard({ className = '' }: Props) {
     setSlots(Array.from({ length: GRID_ROWS }, () => Array(GRID_COLUMNS).fill(null)));
   }, []);
 
-  return <div className={classNames({
-    'tetris-board': true,
-    [className]: !!className
-  })}>
-    {slots?.map((row, rowIndex) => (
+  function renderBlocks() {
+    return slots?.map((row, rowIndex) => (
       <>
         {row.map((block, colIndex) => block != null ? (
           <div className={classNames({
@@ -32,6 +29,13 @@ export function TetrisBoard({ className = '' }: Props) {
           })} key={block?.id} />
         ) : null)}
       </>
-    ))}
+    ));
+  }
+
+  return <div className={classNames({
+    'tetris-board': true,
+    [className]: !!className
+  })}>
+    {renderBlocks()}
   </div>;
 }
