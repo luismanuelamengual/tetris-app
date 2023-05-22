@@ -14,13 +14,14 @@ export function TetrisBoard({
     downKeyCode: 'ArrowDown',
     leftKeyCode: 'ArrowLeft',
     rightKeyCode: 'ArrowRight',
-    rotateLeftKeyCode: 'ArrowUp',
-    rotateRightKeyCode: 'ArrowUp'
+    rotateKeyCode: 'ArrowUp'
   }
 }: Props) {
   const [blocks] = useState<Array<Block>>([]);
   const [tetrominoBlocks, setTetrominoBlocks] = useState<Array<Block>>([]);
   const [tetromino, setTetromino] = useState<Tetromino | null>(null);
+  const [isLeftActionActivated, setLeftActionActivated] = useState(false);
+  const [isRightActionActivated, setRightActionActivated] = useState(false);
   const blockCounter = useRef<number>(0);
 
   useEffect(() => {
@@ -32,15 +33,13 @@ export function TetrisBoard({
   }, []);
 
   useEffect(() => {
-    const keyHandler = (event: KeyboardEvent) => {
-      switch (event.code) {
-        case keyboardControls.leftKeyCode: moveTetrominoLeft(); break;
-        case keyboardControls.rightKeyCode: moveTetrominoRight(); break;
-      }
+    window.addEventListener('keydown', onKeyDown);
+    window.addEventListener('keyup', onKeyUp);
+    return () => {
+      window.removeEventListener('keydown', onKeyDown);
+      window.removeEventListener('keyup', onKeyUp);
     };
-    window.addEventListener('keyup', keyHandler);
-    return () => window.removeEventListener('keyup', keyHandler);
-  }, [tetromino]);
+  }, []);
 
   useEffect(() => {
     if (tetromino === null) {
@@ -111,6 +110,29 @@ export function TetrisBoard({
   const renderTetrominoBlocks = useCallback(() => {
     return tetrominoBlocks.length > 0 && tetrominoBlocks.map((block) => renderBlock(block));
   }, [tetrominoBlocks]);
+
+  useEffect(() => {
+    if (isLeftActionActivated) {
+      moveTetrominoLeft();
+    }
+    if (isRightActionActivated) {
+      moveTetrominoRight();
+    }
+  }, [isLeftActionActivated, isRightActionActivated]);
+
+  const onKeyDown = (event: KeyboardEvent) => {
+    switch (event.code) {
+      case keyboardControls.leftKeyCode: setLeftActionActivated(true); break;
+      case keyboardControls.rightKeyCode: setRightActionActivated(true); break;
+    }
+  };
+
+  const onKeyUp = (event: KeyboardEvent) => {
+    switch (event.code) {
+      case keyboardControls.leftKeyCode: setLeftActionActivated(false); break;
+      case keyboardControls.rightKeyCode: setRightActionActivated(false); break;
+    }
+  };
 
   return <div className={classNames({
     'tetris-board': true,
