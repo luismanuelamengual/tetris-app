@@ -1,5 +1,6 @@
 export * from './block';
 export * from './block-type';
+export * from './keyboard-controls';
 export * from './path';
 export * from './position';
 export * from './tetrominio-types';

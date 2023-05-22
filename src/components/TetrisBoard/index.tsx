@@ -1,13 +1,23 @@
 import classNames from 'classnames';
-import { Block, BlockType, ITetrominoType, Position, Tetromino } from 'models';
+import { Block, BlockType, ITetrominoType, KeyboardControls, Position, Tetromino } from 'models';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import './index.scss';
 
 interface Props {
   className?: string;
+  keyboardControls?: KeyboardControls;
 };
 
-export function TetrisBoard({ className = '' }: Props) {
+export function TetrisBoard({
+  className = '',
+  keyboardControls = {
+    downKeyCode: 'ArrowDown',
+    leftKeyCode: 'ArrowLeft',
+    rightKeyCode: 'ArrowRight',
+    rotateLeftKeyCode: 'ArrowUp',
+    rotateRightKeyCode: 'ArrowUp'
+  }
+}: Props) {
   const [blocks] = useState<Array<Block>>([]);
   const [tetrominoBlocks, setTetrominoBlocks] = useState<Array<Block>>([]);
   const [tetromino, setTetromino] = useState<Tetromino | null>(null);
@@ -17,9 +27,20 @@ export function TetrisBoard({ className = '' }: Props) {
     setTetromino({
       type: ITetrominoType,
       position: { x: 4, y: 9 },
-      rotationIndex: 4
+      rotationIndex: 0
     });
   }, []);
+
+  useEffect(() => {
+    const keyHandler = (event: KeyboardEvent) => {
+      switch (event.code) {
+        case keyboardControls.leftKeyCode: moveTetrominoLeft(); break;
+        case keyboardControls.rightKeyCode: moveTetrominoRight(); break;
+      }
+    };
+    window.addEventListener('keyup', keyHandler);
+    return () => window.removeEventListener('keyup', keyHandler);
+  }, [tetromino]);
 
   useEffect(() => {
     if (tetromino === null) {
@@ -39,9 +60,36 @@ export function TetrisBoard({ className = '' }: Props) {
     }
   }, [tetromino]);
 
-  /*const isAvailableSlot = useCallback(({x, y}: Position): boolean => {
+  const isAvailableSlot = useCallback(({x, y}: Position): boolean => {
     return !(x < 0 || x > 9 || y > 19 || blocks.find((block) => x === block.position.x && y === block.position.y) !== undefined);
-  }, [blocks]);*/
+  }, [blocks]);
+
+  const isValidTetromino = useCallback((tetromino: Tetromino): boolean => {
+    if (tetromino) {
+      const blockOffsets = tetromino.type.shapeOffsets[tetromino.rotationIndex % tetromino.type.shapeOffsets.length];
+      return blockOffsets.every(([blockOffsetX, blockOffsetY]) => isAvailableSlot({ x: tetromino.position.x + blockOffsetX, y: tetromino.position.y + blockOffsetY }));
+    } else {
+      return false;
+    }
+  }, []);
+
+  const moveTetrominoLeft = useCallback(() => {
+    if (tetromino) {
+      const newTetromino = {...tetromino, position: {...tetromino.position, x: tetromino.position.x - 1 }};
+      if (isValidTetromino(newTetromino)) {
+        setTetromino(newTetromino);
+      }
+    }
+  }, [tetromino]);
+
+  const moveTetrominoRight = useCallback(() => {
+    if (tetromino) {
+      const newTetromino = {...tetromino, position: {...tetromino.position, x: tetromino.position.x + 1 }};
+      if (isValidTetromino(newTetromino)) {
+        setTetromino(newTetromino);
+      }
+    }
+  }, [tetromino]);
 
   const createBlock = useCallback((type: BlockType, position: Position): Block => {
     return { id: blockCounter.current++, position, type };
