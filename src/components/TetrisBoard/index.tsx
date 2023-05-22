@@ -20,8 +20,6 @@ export function TetrisBoard({
   const [blocks] = useState<Array<Block>>([]);
   const [tetrominoBlocks, setTetrominoBlocks] = useState<Array<Block>>([]);
   const [tetromino, setTetromino] = useState<Tetromino | null>(null);
-  const [isLeftActionActivated, setLeftActionActivated] = useState(false);
-  const [isRightActionActivated, setRightActionActivated] = useState(false);
   const blockCounter = useRef<number>(0);
 
   useEffect(() => {
@@ -33,11 +31,15 @@ export function TetrisBoard({
   }, []);
 
   useEffect(() => {
-    window.addEventListener('keydown', onKeyDown);
-    window.addEventListener('keyup', onKeyUp);
+    const onKeyUp = (event: KeyboardEvent) => {
+      switch (event.code) {
+        case keyboardControls.leftKeyCode: moveTetrominoLeft(); break;
+        case keyboardControls.rightKeyCode: moveTetrominoRight(); break;
+      }
+    };
+    window.addEventListener('keydown', onKeyUp);
     return () => {
-      window.removeEventListener('keydown', onKeyDown);
-      window.removeEventListener('keyup', onKeyUp);
+      window.removeEventListener('keydown', onKeyUp);
     };
   }, []);
 
@@ -73,22 +75,26 @@ export function TetrisBoard({
   }, []);
 
   const moveTetrominoLeft = useCallback(() => {
-    if (tetromino) {
-      const newTetromino = {...tetromino, position: {...tetromino.position, x: tetromino.position.x - 1 }};
-      if (isValidTetromino(newTetromino)) {
-        setTetromino(newTetromino);
+    setTetromino((previousTetromino) => {
+      if (previousTetromino) {
+        const newTetromino = {...previousTetromino, position: {...previousTetromino.position, x: previousTetromino.position.x - 1 }};
+        return isValidTetromino(newTetromino)? newTetromino : previousTetromino;
+      } else {
+        return previousTetromino;
       }
-    }
-  }, [tetromino]);
+    });
+  }, []);
 
   const moveTetrominoRight = useCallback(() => {
-    if (tetromino) {
-      const newTetromino = {...tetromino, position: {...tetromino.position, x: tetromino.position.x + 1 }};
-      if (isValidTetromino(newTetromino)) {
-        setTetromino(newTetromino);
+    setTetromino((previousTetromino) => {
+      if (previousTetromino) {
+        const newTetromino = {...previousTetromino, position: {...previousTetromino.position, x: previousTetromino.position.x + 1 }};
+        return isValidTetromino(newTetromino)? newTetromino : previousTetromino;
+      } else {
+        return previousTetromino;
       }
-    }
-  }, [tetromino]);
+    });
+  }, []);
 
   const createBlock = useCallback((type: BlockType, position: Position): Block => {
     return { id: blockCounter.current++, position, type };
@@ -110,29 +116,6 @@ export function TetrisBoard({
   const renderTetrominoBlocks = useCallback(() => {
     return tetrominoBlocks.length > 0 && tetrominoBlocks.map((block) => renderBlock(block));
   }, [tetrominoBlocks]);
-
-  useEffect(() => {
-    if (isLeftActionActivated) {
-      moveTetrominoLeft();
-    }
-    if (isRightActionActivated) {
-      moveTetrominoRight();
-    }
-  }, [isLeftActionActivated, isRightActionActivated]);
-
-  const onKeyDown = (event: KeyboardEvent) => {
-    switch (event.code) {
-      case keyboardControls.leftKeyCode: setLeftActionActivated(true); break;
-      case keyboardControls.rightKeyCode: setRightActionActivated(true); break;
-    }
-  };
-
-  const onKeyUp = (event: KeyboardEvent) => {
-    switch (event.code) {
-      case keyboardControls.leftKeyCode: setLeftActionActivated(false); break;
-      case keyboardControls.rightKeyCode: setRightActionActivated(false); break;
-    }
-  };
 
   return <div className={classNames({
     'tetris-board': true,
