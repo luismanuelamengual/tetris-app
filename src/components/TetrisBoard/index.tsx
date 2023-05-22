@@ -32,9 +32,11 @@ export function TetrisBoard({
 
   useEffect(() => {
     const onKeyUp = (event: KeyboardEvent) => {
+      const { leftKeyCode, rightKeyCode, rotateKeyCode } = keyboardControls;
       switch (event.code) {
-        case keyboardControls.leftKeyCode: moveTetrominoLeft(); break;
-        case keyboardControls.rightKeyCode: moveTetrominoRight(); break;
+        case leftKeyCode: moveTetrominoLeft(); break;
+        case rightKeyCode: moveTetrominoRight(); break;
+        case rotateKeyCode: rotateTetromino(); break;
       }
     };
     window.addEventListener('keydown', onKeyUp);
@@ -89,6 +91,17 @@ export function TetrisBoard({
     setTetromino((previousTetromino) => {
       if (previousTetromino) {
         const newTetromino = {...previousTetromino, position: {...previousTetromino.position, x: previousTetromino.position.x + 1 }};
+        return isValidTetromino(newTetromino)? newTetromino : previousTetromino;
+      } else {
+        return previousTetromino;
+      }
+    });
+  }, []);
+
+  const rotateTetromino = useCallback(() => {
+    setTetromino((previousTetromino) => {
+      if (previousTetromino) {
+        const newTetromino = {...previousTetromino, rotationIndex: previousTetromino.rotationIndex + 1};
         return isValidTetromino(newTetromino)? newTetromino : previousTetromino;
       } else {
         return previousTetromino;
