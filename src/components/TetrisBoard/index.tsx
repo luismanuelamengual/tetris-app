@@ -17,7 +17,7 @@ export function TetrisBoard({
     rotateKeyCode: 'ArrowUp'
   }
 }: Props) {
-  const [blocks] = useState<Array<Block>>([]);
+  const [blocks, setBlocks] = useState<Array<Block>>([]);
   const [tetrominoBlocks, setTetrominoBlocks] = useState<Array<Block>>([]);
   const [tetromino, setTetromino] = useState<Tetromino | null>(null);
   const [isGameOver, setIsGameOver] = useState(false);
@@ -41,6 +41,20 @@ export function TetrisBoard({
   }, [isGameOver, tetromino]);
 
   useEffect(() => {
+    let task: any = null;
+    if (!isGameOver) {
+      task = setInterval(() => {
+        moveTetrominoDown();
+      }, 1000);
+    }
+    return () => {
+      if (task != null) {
+        clearInterval(task);
+      }
+    };
+  }, [isGameOver]);
+
+  useEffect(() => {
     const onKeyUp = (event: KeyboardEvent) => {
       const { leftKeyCode, rightKeyCode, rotateKeyCode } = keyboardControls;
       switch (event.code) {
@@ -57,7 +71,12 @@ export function TetrisBoard({
 
   useEffect(() => {
     if (tetromino === null) {
-      setTetrominoBlocks([]);
+      setTetrominoBlocks((tetrominoBlocks) => {
+        if (tetrominoBlocks.length > 0) {
+          setBlocks(previousBlocks => [...previousBlocks, ...tetrominoBlocks]);
+        }
+        return [];
+      });
     } else {
       setTetrominoBlocks((tetrominoBlocks) => {
         const blocks = [...tetrominoBlocks];
@@ -119,16 +138,16 @@ export function TetrisBoard({
     });
   }, []);
 
-  /*const moveTetrominoDown = useCallback(() => {
+  const moveTetrominoDown = useCallback(() => {
     setTetromino((previousTetromino) => {
       if (previousTetromino) {
         const newTetromino = {...previousTetromino, position: {...previousTetromino.position, y: previousTetromino.position.y + 1 }};
-        return isValidTetromino(newTetromino)? newTetromino : previousTetromino;
+        return isValidTetromino(newTetromino)? newTetromino : null;
       } else {
         return previousTetromino;
       }
     });
-  }, []);*/
+  }, []);
 
   const createBlock = useCallback((type: BlockType, position: Position): Block => {
     return { id: blockCounter.current++, position, type };
