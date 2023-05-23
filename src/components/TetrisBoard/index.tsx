@@ -21,6 +21,7 @@ export function TetrisBoard({
   const [tetrominoBlocks, setTetrominoBlocks] = useState<Array<Block>>([]);
   const [tetromino, setTetromino] = useState<Tetromino | null>(null);
   const [isGameOver, setIsGameOver] = useState(false);
+  const [acceleratorPressed, setAcceleratorPressed] = useState<boolean>(false);
   const blockCounter = useRef<number>(0);
 
   const isAvailableSlot = useCallback(({x, y}: Position): boolean => {
@@ -102,29 +103,40 @@ export function TetrisBoard({
     if (!isGameOver) {
       task = setInterval(() => {
         moveTetrominoDown();
-      }, 300);
+      }, acceleratorPressed ? 50 : 1000);
     }
     return () => {
       if (task != null) {
         clearInterval(task);
       }
     };
-  }, [isGameOver, moveTetrominoDown]);
+  }, [isGameOver, acceleratorPressed, moveTetrominoDown]);
+
+  const keyDownHandler = useCallback((event: KeyboardEvent) => {
+    const { leftKeyCode, rightKeyCode, rotateKeyCode, downKeyCode } = keyboardControls;
+    switch (event.code) {
+      case leftKeyCode: moveTetrominoLeft(); break;
+      case rightKeyCode: moveTetrominoRight(); break;
+      case rotateKeyCode: rotateTetromino(); break;
+      case downKeyCode: setAcceleratorPressed(true); break;
+    }
+  }, [moveTetrominoLeft, moveTetrominoRight, rotateTetromino]);
+
+  const keyUpHandler = useCallback((event: KeyboardEvent) => {
+    const { downKeyCode } = keyboardControls;
+    switch (event.code) {
+      case downKeyCode: setAcceleratorPressed(false); break;
+    }
+  }, []);
 
   useEffect(() => {
-    const onKeyUp = (event: KeyboardEvent) => {
-      const { leftKeyCode, rightKeyCode, rotateKeyCode } = keyboardControls;
-      switch (event.code) {
-        case leftKeyCode: moveTetrominoLeft(); break;
-        case rightKeyCode: moveTetrominoRight(); break;
-        case rotateKeyCode: rotateTetromino(); break;
-      }
-    };
-    window.addEventListener('keydown', onKeyUp);
+    window.addEventListener('keydown', keyDownHandler);
+    window.addEventListener('keyup', keyUpHandler);
     return () => {
-      window.removeEventListener('keydown', onKeyUp);
+      window.removeEventListener('keydown', keyDownHandler);
+      window.removeEventListener('keyup', keyUpHandler);
     };
-  }, [moveTetrominoLeft, moveTetrominoRight, rotateTetromino]);
+  }, [keyDownHandler, keyUpHandler]);
 
   useEffect(() => {
     if (tetromino === null) {
