@@ -17,7 +17,7 @@ export function TetrisBoard({
     rotateKeyCode: 'ArrowUp'
   }
 }: Props) {
-  const [blocks, setBlocks] = useState<Array<Block>>([]);
+  const [slots, setSlots] = useState<Array<Array<Block | null>>>(Array.from({ length: 20 }, () => Array(10).fill(null)));
   const [tetrominoBlocks, setTetrominoBlocks] = useState<Array<Block>>([]);
   const [tetromino, setTetromino] = useState<Tetromino | null>(null);
   const [isGameOver, setIsGameOver] = useState(false);
@@ -25,8 +25,8 @@ export function TetrisBoard({
   const blockCounter = useRef<number>(0);
 
   const isAvailableSlot = useCallback(({x, y}: Position): boolean => {
-    return !(x < 0 || x > 9 || y > 19 || blocks.find((block) => x === block.position.x && y === block.position.y) !== undefined);
-  }, [blocks]);
+    return !(x < 0 || x > 9 || y > 19 || (y > 0 && slots[y][x] !== null));
+  }, [slots]);
 
   const isValidTetromino = useCallback((tetromino: Tetromino): boolean => {
     const blockOffsets = tetromino.type.shapeOffsets[tetromino.rotationIndex % tetromino.type.shapeOffsets.length];
@@ -142,7 +142,10 @@ export function TetrisBoard({
     if (tetromino === null) {
       setTetrominoBlocks((tetrominoBlocks) => {
         if (tetrominoBlocks.length > 0) {
-          setBlocks(previousBlocks => [...previousBlocks, ...tetrominoBlocks]);
+          setSlots(previousSlots => {
+            tetrominoBlocks.forEach((block) => previousSlots[block.position.y][block.position.x] = block);
+            return previousSlots;
+          });
         }
         return [];
       });
@@ -171,8 +174,8 @@ export function TetrisBoard({
   }, []);
 
   const renderBlocks = useCallback(() => {
-    return blocks.length > 0 && blocks.map((block) => renderBlock(block));
-  }, [blocks, renderBlock]);
+    return slots.map((row) => row.map((cell) => cell ? renderBlock(cell) : null));
+  }, [slots, renderBlock]);
 
   const renderTetrominoBlocks = useCallback(() => {
     return tetrominoBlocks.length > 0 && tetrominoBlocks.map((block) => renderBlock(block));
