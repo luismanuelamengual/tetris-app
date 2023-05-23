@@ -20,15 +20,25 @@ export function TetrisBoard({
   const [blocks] = useState<Array<Block>>([]);
   const [tetrominoBlocks, setTetrominoBlocks] = useState<Array<Block>>([]);
   const [tetromino, setTetromino] = useState<Tetromino | null>(null);
+  const [isGameOver, setIsGameOver] = useState(false);
   const blockCounter = useRef<number>(0);
 
   useEffect(() => {
-    setTetromino({
-      type: ITetrominoType,
-      position: { x: 4, y: 9 },
-      rotationIndex: 0
-    });
-  }, []);
+    if (!isGameOver) {
+      if (tetromino === null) {
+        const newTetromino = {
+          type: ITetrominoType,
+          position: { x: 4, y: 0 },
+          rotationIndex: 0
+        };
+        if (isValidTetromino(newTetromino)) {
+          setTetromino(newTetromino);
+        } else {
+          setIsGameOver(true);
+        }
+      }
+    }
+  }, [isGameOver, tetromino]);
 
   useEffect(() => {
     const onKeyUp = (event: KeyboardEvent) => {
@@ -108,6 +118,17 @@ export function TetrisBoard({
       }
     });
   }, []);
+
+  /*const moveTetrominoDown = useCallback(() => {
+    setTetromino((previousTetromino) => {
+      if (previousTetromino) {
+        const newTetromino = {...previousTetromino, position: {...previousTetromino.position, y: previousTetromino.position.y + 1 }};
+        return isValidTetromino(newTetromino)? newTetromino : previousTetromino;
+      } else {
+        return previousTetromino;
+      }
+    });
+  }, []);*/
 
   const createBlock = useCallback((type: BlockType, position: Position): Block => {
     return { id: blockCounter.current++, position, type };
