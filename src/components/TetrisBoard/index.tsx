@@ -30,7 +30,7 @@ export function TetrisBoard({
   }, [slots]);
 
   const isValidTetromino = useCallback((tetromino: Tetromino): boolean => {
-    const blockOffsets = tetromino.type.shapeOffsets[tetromino.rotationIndex % tetromino.type.shapeOffsets.length];
+    const blockOffsets = tetromino.type.shapeOffsets[tetromino.rotationIndex];
     return blockOffsets.every(([blockOffsetX, blockOffsetY]) => isAvailableSlot({ x: tetromino.position.x + blockOffsetX, y: tetromino.position.y + blockOffsetY }));
   }, [isAvailableSlot]);
 
@@ -54,7 +54,8 @@ export function TetrisBoard({
 
   const rotateTetromino = useCallback(() => {
     if (tetromino) {
-      const newTetromino = {...tetromino, rotationIndex: tetromino.rotationIndex + 1};
+      const newTetromino = {...tetromino, rotationIndex: (tetromino.rotationIndex + 1) % tetromino.type.shapeOffsets.length};
+      console.log(newTetromino);
       if (isValidTetromino(newTetromino)) {
         setTetromino(newTetromino);
       }
