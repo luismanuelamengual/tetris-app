@@ -103,7 +103,7 @@ export function TetrisBoard({
     if (!isGameOver) {
       task = setInterval(() => {
         moveTetrominoDown();
-      }, acceleratorPressed ? 50 : 1000);
+      }, acceleratorPressed ? 50 : 10000);
     }
     return () => {
       if (task != null) {
@@ -143,8 +143,9 @@ export function TetrisBoard({
       setTetrominoBlocks((tetrominoBlocks) => {
         if (tetrominoBlocks.length > 0) {
           setSlots(previousSlots => {
-            tetrominoBlocks.forEach((block) => previousSlots[block.position.y][block.position.x] = block);
-            return previousSlots;
+            const newSlots = [...previousSlots];
+            tetrominoBlocks.forEach((block) => newSlots[block.position.y][block.position.x] = block);
+            return newSlots;
           });
         }
         return [];
@@ -163,6 +164,29 @@ export function TetrisBoard({
       });
     }
   }, [tetromino, createBlock]);
+
+  useEffect(() => {
+    const newSlots = [...slots];
+    let linesCleared = 0;
+    for (let row = 19; row >= 0; row--) {
+      if (newSlots[row].every(cell => cell !== null)) {
+        newSlots.splice(row, 1);
+        newSlots.unshift(Array(10).fill(null));
+        linesCleared++;
+      }
+    }
+    if (linesCleared > 0) {
+      for (let row = 19; row >= 0; row--) {
+        for (let cell = 0; cell <= 9; cell++) {
+          const block = newSlots[row][cell];
+          if (block != null) {
+            block.position = { y: row, x: cell };
+          }
+        }
+      }
+      setSlots(newSlots);
+    }
+  }, [slots]);
 
   const renderBlock = useCallback((block: Block) => {
     return (<div className={classNames({
