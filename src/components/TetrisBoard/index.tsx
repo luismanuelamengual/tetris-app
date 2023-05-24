@@ -57,7 +57,6 @@ export function TetrisBoard({
   const rotateTetromino = useCallback(() => {
     if (tetromino) {
       const newTetromino = {...tetromino, rotationIndex: (tetromino.rotationIndex + 1) % tetromino.type.shapeOffsets.length};
-      console.log(newTetromino);
       if (isValidTetromino(newTetromino)) {
         setTetromino(newTetromino);
       }
