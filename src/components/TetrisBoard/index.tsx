@@ -25,21 +25,21 @@ export function TetrisBoard({
   const blockCounter = useRef<number>(0);
   const executeGameTickRef = useRef<any>();
 
-  const isAvailableSlot = useCallback(({x, y}: Position): boolean => {
-    return x >= 0 && x < 10 && y >= 0 && y < 20 && slots[y][x] === null;
+  const isAvailableSlot = useCallback(({column, row}: Position): boolean => {
+    return column >= 0 && column < 10 && row >= 0 && row < 20 && slots[row][column] === null;
   }, [slots]);
 
   const isValidTetromino = useCallback((tetromino: Tetromino): boolean => {
     return tetromino.type.shapeOffsets[tetromino.rotationIndex]
-      .map(([blockOffsetX, blockOffsetY]) => ({ x: tetromino.position.x + blockOffsetX, y: tetromino.position.y + blockOffsetY }))
-      .filter(position => position.y >= 0)
+      .map(([columnOffset, rowOffset]) => ({ column: tetromino.position.column + columnOffset, row: tetromino.position.row + rowOffset }))
+      .filter(position => position.row >= 0)
       .every(isAvailableSlot);
   }, [isAvailableSlot]);
 
   const moveTetrominoLeft = useCallback((): boolean => {
     let success = false;
     if (tetromino) {
-      const newTetromino = {...tetromino, position: {...tetromino.position, x: tetromino.position.x - 1 }};
+      const newTetromino = {...tetromino, position: {...tetromino.position, column: tetromino.position.column - 1 }};
       if (isValidTetromino(newTetromino)) {
         setTetromino(newTetromino);
         success = true;
@@ -51,7 +51,7 @@ export function TetrisBoard({
   const moveTetrominoRight = useCallback((): boolean => {
     let success = false;
     if (tetromino) {
-      const newTetromino = {...tetromino, position: {...tetromino.position, x: tetromino.position.x + 1 }};
+      const newTetromino = {...tetromino, position: {...tetromino.position, column: tetromino.position.column + 1 }};
       if (isValidTetromino(newTetromino)) {
         setTetromino(newTetromino);
         success = true;
@@ -75,7 +75,7 @@ export function TetrisBoard({
   const moveTetrominoDown = useCallback((): boolean => {
     let success = false;
     if (tetromino) {
-      const newTetromino = {...tetromino, position: {...tetromino.position, y: tetromino.position.y + 1 }};
+      const newTetromino = {...tetromino, position: {...tetromino.position, row: tetromino.position.row + 1 }};
       if (isValidTetromino(newTetromino)) {
         setTetromino(newTetromino);
         success = true;
@@ -88,7 +88,7 @@ export function TetrisBoard({
     if (tetrominoBlocks.length > 0) {
       setSlots(previousSlots => {
         const newSlots = [...previousSlots];
-        tetrominoBlocks.filter(block => block.position.y >= 0).forEach((block) => newSlots[block.position.y][block.position.x] = block);
+        tetrominoBlocks.filter(block => block.position.row >= 0).forEach((block) => newSlots[block.position.row][block.position.column] = block);
         return newSlots;
       });
     }
@@ -120,8 +120,8 @@ export function TetrisBoard({
     return (<div className={classNames({
       'block': true,
       [`block-${block.type}`]: true,
-      [`x${block.position.x + 1}`]: true,
-      [`y${block.position.y + 1}`]: true,
+      [`x${block.position.column + 1}`]: true,
+      [`y${block.position.row + 1}`]: true,
     })} key={block.id}/>);
   }, []);
 
@@ -138,7 +138,7 @@ export function TetrisBoard({
       if (tetromino === null) {
         const newTetromino = {
           type: ITetrominoType,
-          position: { x: 4, y: 0 },
+          position: { column: 4, row: 0 },
           rotationIndex: 0
         };
         if (isValidTetromino(newTetromino)) {
@@ -187,12 +187,12 @@ export function TetrisBoard({
     } else {
       setTetrominoBlocks((tetrominoBlocks) => {
         const blocks = [...tetrominoBlocks];
-        const blockOffsets = tetromino.type.shapeOffsets[tetromino.rotationIndex % tetromino.type.shapeOffsets.length];
-        const blockPositions = blockOffsets.map(([blockOffsetX, blockOffsetY]) => ({ x: tetromino.position.x + blockOffsetX, y: tetromino.position.y + blockOffsetY }));
+        const positions = tetromino.type.shapeOffsets[tetromino.rotationIndex]
+          .map(([columnOffset, rowOffset]) => ({ column: tetromino.position.column + columnOffset, row: tetromino.position.row + rowOffset }));
         if (blocks.length === 0) {
-          blockPositions.forEach((position) => { blocks.push(createBlock(tetromino.type.blockType, position)); });
+          positions.forEach((position) => { blocks.push(createBlock(tetromino.type.blockType, position)); });
         } else {
-          blocks.forEach((block, index) => { block.position = blockPositions[index]; });
+          blocks.forEach((block, index) => { block.position = positions[index]; });
         }
         return blocks;
       });
@@ -211,10 +211,10 @@ export function TetrisBoard({
     }
     if (linesCleared > 0) {
       for (let row = 19; row >= 0; row--) {
-        for (let cell = 0; cell <= 9; cell++) {
-          const block = newSlots[row][cell];
+        for (let column = 0; column <= 9; column++) {
+          const block = newSlots[row][column];
           if (block != null) {
-            block.position = { y: row, x: cell };
+            block.position = { row, column };
           }
         }
       }
