@@ -23,9 +23,10 @@ export function TetrisBoard({
   const [isGameOver, setIsGameOver] = useState(false);
   const [acceleratorPressed, setAcceleratorPressed] = useState<boolean>(false);
   const blockCounter = useRef<number>(0);
+  const moveTetrominoDownRef = useRef<any>();
 
   const isAvailableSlot = useCallback(({x, y}: Position): boolean => {
-    return !(x < 0 || x > 9 || y > 19 || (y > 0 && slots[y][x] !== null));
+    return !(x < 0 || x > 9 || y > 19 || (y >= 0 && slots[y][x] !== null));
   }, [slots]);
 
   const isValidTetromino = useCallback((tetromino: Tetromino): boolean => {
@@ -34,48 +35,38 @@ export function TetrisBoard({
   }, [isAvailableSlot]);
 
   const moveTetrominoLeft = useCallback(() => {
-    setTetromino((previousTetromino) => {
-      if (previousTetromino) {
-        const newTetromino = {...previousTetromino, position: {...previousTetromino.position, x: previousTetromino.position.x - 1 }};
-        return isValidTetromino(newTetromino)? newTetromino : previousTetromino;
-      } else {
-        return previousTetromino;
+    if (tetromino) {
+      const newTetromino = {...tetromino, position: {...tetromino.position, x: tetromino.position.x - 1 }};
+      if (isValidTetromino(newTetromino)) {
+        setTetromino(newTetromino);
       }
-    });
-  }, [isValidTetromino]);
+    }
+  }, [tetromino, isValidTetromino]);
 
   const moveTetrominoRight = useCallback(() => {
-    setTetromino((previousTetromino) => {
-      if (previousTetromino) {
-        const newTetromino = {...previousTetromino, position: {...previousTetromino.position, x: previousTetromino.position.x + 1 }};
-        return isValidTetromino(newTetromino)? newTetromino : previousTetromino;
-      } else {
-        return previousTetromino;
+    if (tetromino) {
+      const newTetromino = {...tetromino, position: {...tetromino.position, x: tetromino.position.x + 1 }};
+      if (isValidTetromino(newTetromino)) {
+        setTetromino(newTetromino);
       }
-    });
-  }, [isValidTetromino]);
+    }
+  }, [tetromino, isValidTetromino]);
 
   const rotateTetromino = useCallback(() => {
-    setTetromino((previousTetromino) => {
-      if (previousTetromino) {
-        const newTetromino = {...previousTetromino, rotationIndex: previousTetromino.rotationIndex + 1};
-        return isValidTetromino(newTetromino)? newTetromino : previousTetromino;
-      } else {
-        return previousTetromino;
+    if (tetromino) {
+      const newTetromino = {...tetromino, rotationIndex: tetromino.rotationIndex + 1};
+      if (isValidTetromino(newTetromino)) {
+        setTetromino(newTetromino);
       }
-    });
-  }, [isValidTetromino]);
+    }
+  }, [tetromino, isValidTetromino]);
 
   const moveTetrominoDown = useCallback(() => {
-    setTetromino((previousTetromino) => {
-      if (previousTetromino) {
-        const newTetromino = {...previousTetromino, position: {...previousTetromino.position, y: previousTetromino.position.y + 1 }};
-        return isValidTetromino(newTetromino)? newTetromino : null;
-      } else {
-        return previousTetromino;
-      }
-    });
-  }, [isValidTetromino]);
+    if (tetromino) {
+      const newTetromino = {...tetromino, position: {...tetromino.position, y: tetromino.position.y + 1 }};
+      setTetromino(isValidTetromino(newTetromino)? newTetromino : null);
+    }
+  }, [tetromino, isValidTetromino]);
 
   const createBlock = useCallback((type: BlockType, position: Position): Block => {
     return { id: blockCounter.current++, position, type };
@@ -99,18 +90,22 @@ export function TetrisBoard({
   }, [isGameOver, tetromino, isValidTetromino]);
 
   useEffect(() => {
+    moveTetrominoDownRef.current = moveTetrominoDown;
+  }, [moveTetrominoDown]);
+
+  useEffect(() => {
     let task: any = null;
     if (!isGameOver) {
       task = setInterval(() => {
-        moveTetrominoDown();
-      }, acceleratorPressed ? 50 : 10000);
+        moveTetrominoDownRef.current();
+      }, acceleratorPressed ? 50 : 1000);
     }
     return () => {
       if (task != null) {
         clearInterval(task);
       }
     };
-  }, [isGameOver, acceleratorPressed, moveTetrominoDown]);
+  }, [isGameOver, acceleratorPressed]);
 
   const keyDownHandler = useCallback((event: KeyboardEvent) => {
     const { leftKeyCode, rightKeyCode, rotateKeyCode, downKeyCode } = keyboardControls;
@@ -144,7 +139,11 @@ export function TetrisBoard({
         if (tetrominoBlocks.length > 0) {
           setSlots(previousSlots => {
             const newSlots = [...previousSlots];
-            tetrominoBlocks.forEach((block) => newSlots[block.position.y][block.position.x] = block);
+            tetrominoBlocks.forEach((block) => {
+              if (block.position.y >= 0) {
+                newSlots[block.position.y][block.position.x] = block;
+              }
+            });
             return newSlots;
           });
         }
