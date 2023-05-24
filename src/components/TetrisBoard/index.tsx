@@ -26,7 +26,7 @@ export function TetrisBoard({
   const moveTetrominoDownRef = useRef<any>();
 
   const isAvailableSlot = useCallback(({x, y}: Position): boolean => {
-    return !(x < 0 || x > 9 || y < 0 || y > 19 || slots[y][x] !== null);
+    return x >= 0 && x < 10 && y >= 0 && y < 20 && slots[y][x] === null;
   }, [slots]);
 
   const isValidTetromino = useCallback((tetromino: Tetromino): boolean => {
