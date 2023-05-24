@@ -23,7 +23,7 @@ export function TetrisBoard({
   const [isGameOver, setIsGameOver] = useState(false);
   const [acceleratorPressed, setAcceleratorPressed] = useState<boolean>(false);
   const blockCounter = useRef<number>(0);
-  const executeTetrominoMovementRef = useRef<any>();
+  const executeGameTickRef = useRef<any>();
 
   const isAvailableSlot = useCallback(({x, y}: Position): boolean => {
     return x >= 0 && x < 10 && y >= 0 && y < 20 && slots[y][x] === null;
@@ -95,12 +95,6 @@ export function TetrisBoard({
     setTetromino(null);
   }, [tetrominoBlocks]);
 
-  const executeTetrominoMovement = useCallback(() => {
-    if (!moveTetrominoDown()) {
-      freezeTetromino();
-    }
-  }, [moveTetrominoDown, freezeTetromino]);
-
   const onKeyDown = useCallback((event: KeyboardEvent) => {
     const { leftKeyCode, rightKeyCode, rotateKeyCode, downKeyCode } = keyboardControls;
     switch (event.code) {
@@ -139,11 +133,7 @@ export function TetrisBoard({
     return tetrominoBlocks.length > 0 && tetrominoBlocks.map((block) => renderBlock(block));
   }, [tetrominoBlocks, renderBlock]);
 
-  useEffect(() => {
-    executeTetrominoMovementRef.current = executeTetrominoMovement;
-  }, [executeTetrominoMovement]);
-
-  useEffect(() => {
+  const executeGameTick = useCallback(() => {
     if (!isGameOver) {
       if (tetromino === null) {
         const newTetromino = {
@@ -156,15 +146,23 @@ export function TetrisBoard({
         } else {
           setIsGameOver(true);
         }
+      } else {
+        if (!moveTetrominoDown()) {
+          freezeTetromino();
+        }
       }
     }
-  }, [isGameOver, tetromino, isValidTetromino]);
+  }, [isGameOver, tetromino, isValidTetromino, moveTetrominoDown, freezeTetromino]);
+
+  useEffect(() => {
+    executeGameTickRef.current = executeGameTick;
+  }, [executeGameTick]);
 
   useEffect(() => {
     let task: any = null;
     if (!isGameOver) {
       task = setInterval(() => {
-        executeTetrominoMovementRef.current();
+        executeGameTickRef.current();
       }, acceleratorPressed ? 50 : 1000);
     }
     return () => {
