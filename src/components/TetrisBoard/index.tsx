@@ -26,12 +26,14 @@ export function TetrisBoard({
   const moveTetrominoDownRef = useRef<any>();
 
   const isAvailableSlot = useCallback(({x, y}: Position): boolean => {
-    return !(x < 0 || x > 9 || y > 19 || (y >= 0 && slots[y][x] !== null));
+    return !(x < 0 || x > 9 || y < 0 || y > 19 || slots[y][x] !== null);
   }, [slots]);
 
   const isValidTetromino = useCallback((tetromino: Tetromino): boolean => {
-    const blockOffsets = tetromino.type.shapeOffsets[tetromino.rotationIndex];
-    return blockOffsets.every(([blockOffsetX, blockOffsetY]) => isAvailableSlot({ x: tetromino.position.x + blockOffsetX, y: tetromino.position.y + blockOffsetY }));
+    return tetromino.type.shapeOffsets[tetromino.rotationIndex]
+      .map(([blockOffsetX, blockOffsetY]) => ({ x: tetromino.position.x + blockOffsetX, y: tetromino.position.y + blockOffsetY }))
+      .filter(position => position.y >= 0)
+      .every(isAvailableSlot);
   }, [isAvailableSlot]);
 
   const moveTetrominoLeft = useCallback(() => {
