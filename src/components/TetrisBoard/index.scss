@@ -30,6 +30,11 @@ $backgroundColor: black;
       background: linear-gradient(137deg, rgba(83,176,255,1) 0%, rgba(27,150,255,1) 100%);
     }
 
+    &.block-l {
+      background: rgb(255,161,83);
+      background: linear-gradient(137deg, rgba(255,161,83,1) 0%, rgba(255,145,27,1) 100%);
+    }
+
     &.block-o {
       background: rgb(255,253,83);
       background: linear-gradient(137deg, rgba(255,253,83,1) 0%, rgba(254,255,27,1) 100%);
