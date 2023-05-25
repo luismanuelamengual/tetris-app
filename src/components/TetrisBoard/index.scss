@@ -1,6 +1,7 @@
 $backgroundColor: black;
 $blockGradientAngle: 135deg;
 $blockGradientLightningPercentage: 15%;
+$blockBorderLightningPercentage: 0%;
 $blockIColor: rgb(255, 40, 40);
 $blockJColor: rgb(80, 80, 255);
 $blockLColor: rgb(209, 150, 0);
@@ -58,43 +59,43 @@ $blockInactiveColor: rgb(128, 128, 128);
     &.block-i {
       background: $blockIColor;
       background: linear-gradient($blockGradientAngle, $blockIColor, lighten($blockIColor, $blockGradientLightningPercentage), $blockIColor);
-      border-color: $blockIColor;
+      border-color: lighten($blockIColor, $blockBorderLightningPercentage);
     }
 
     &.block-j {
       background: $blockJColor;
       background: linear-gradient($blockGradientAngle, $blockJColor, lighten($blockJColor, $blockGradientLightningPercentage), $blockJColor);
-      border-color: $blockJColor;
+      border-color: lighten($blockJColor, $blockBorderLightningPercentage);
     }
 
     &.block-l {
       background: $blockLColor;
       background: linear-gradient($blockGradientAngle, $blockLColor, lighten($blockLColor, $blockGradientLightningPercentage), $blockLColor);
-      border-color: $blockLColor;
+      border-color: lighten($blockLColor, $blockBorderLightningPercentage);
     }
 
     &.block-o {
       background: $blockOColor;
       background: linear-gradient($blockGradientAngle, $blockOColor, lighten($blockOColor, $blockGradientLightningPercentage), $blockOColor);
-      border-color: $blockOColor;
+      border-color: lighten($blockOColor, $blockBorderLightningPercentage);
     }
 
     &.block-s {
       background: $blockSColor;
       background: linear-gradient($blockGradientAngle, $blockSColor, lighten($blockSColor, $blockGradientLightningPercentage), $blockSColor);
-      border-color: $blockSColor;
+      border-color: lighten($blockSColor, $blockBorderLightningPercentage);
     }
 
     &.block-z {
       background: $blockZColor;
       background: linear-gradient($blockGradientAngle, $blockZColor, lighten($blockZColor, $blockGradientLightningPercentage), $blockZColor);
-      border-color: $blockZColor;
+      border-color: lighten($blockZColor, $blockBorderLightningPercentage);
     }
 
     &.block-t {
       background: $blockTColor;
       background: linear-gradient($blockGradientAngle, $blockTColor, lighten($blockTColor, $blockGradientLightningPercentage), $blockTColor);
-      border-color: $blockTColor;
+      border-color: lighten($blockTColor, $blockBorderLightningPercentage);
     }
 
     @for $x from 1 through 10 {
@@ -116,7 +117,7 @@ $blockInactiveColor: rgb(128, 128, 128);
     .block {
       background: $blockInactiveColor;
       background: linear-gradient($blockGradientAngle, $blockInactiveColor, lighten($blockInactiveColor, $blockGradientLightningPercentage), $blockInactiveColor);
-      border-color: $blockInactiveColor;
+      border-color: lighten($blockInactiveColor, $blockBorderLightningPercentage);;
     }
   }
 }
