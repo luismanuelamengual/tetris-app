@@ -111,49 +111,6 @@ export function TetrisBoard({
     setTetromino(null);
   }, [tetrominoBlocks]);
 
-  const clearBlockLines = useCallback(() => {
-    setSlots((slots) => {
-      const slotsMarked = [...slots];
-      let linesMarked = 0;
-      for (let row = 19; row >= 0; row--) {
-        if (slotsMarked[row].every(cell => cell !== null)) {
-          slotsMarked[row].forEach(block => {
-            if (block) {
-              block.removed = true;
-            }
-          });
-          linesMarked++;
-        }
-      }
-      if (linesMarked) {
-        setTimeout(() => {
-          setSlots((previousSlots) => {
-            const newSlots = [...previousSlots];
-            let row = 19;
-            while (row >= 0) {
-              if (newSlots[row].every(cell => cell !== null)) {
-                newSlots.splice(row, 1);
-                newSlots.unshift(Array(10).fill(null));
-              } else {
-                row--;
-              }
-            }
-            for (let row = 19; row >= 0; row--) {
-              for (let column = 0; column <= 9; column++) {
-                const block = newSlots[row][column];
-                if (block != null) {
-                  block.position = { row, column };
-                }
-              }
-            }
-            return newSlots;
-          });
-        }, 500);
-      }
-      return linesMarked ? slotsMarked : slots;
-    });
-  }, []);
-
   const onKeyDown = useCallback((event: KeyboardEvent) => {
     const { leftKeyCode, rightKeyCode, rotateKeyCode, downKeyCode } = keyboardControls;
     switch (event.code) {
@@ -202,11 +159,10 @@ export function TetrisBoard({
       } else {
         if (!moveTetrominoDown()) {
           freezeTetromino();
-          clearBlockLines();
         }
       }
     }
-  }, [isGameOver, tetromino, isValidTetromino, moveTetrominoDown, freezeTetromino, clearBlockLines]);
+  }, [isGameOver, tetromino, isValidTetromino, moveTetrominoDown, freezeTetromino]);
 
   useEffect(() => {
     executeGameTickRef.current = executeGameTick;
@@ -252,6 +208,36 @@ export function TetrisBoard({
       });
     }
   }, [tetromino, createBlock]);
+
+  useEffect(() => {
+    const slotsMarked = [...slots];
+    let linesMarked = 0;
+    for (let row = 19; row >= 0; row--) {
+      if (slotsMarked[row].every(cell => cell !== null && !cell.removed)) {
+        slotsMarked[row].forEach(block => block && (block.removed = true));
+        linesMarked++;
+      }
+    }
+    if (linesMarked) {
+      setSlots(slotsMarked);
+      setTimeout(() => {
+        setSlots((previousSlots) => {
+          const newSlots = [...previousSlots];
+          let row = 19;
+          while (row >= 0) {
+            if (newSlots[row].every(cell => cell !== null)) {
+              newSlots.splice(row, 1);
+              newSlots.unshift(Array(10).fill(null));
+            } else {
+              row--;
+            }
+          }
+          newSlots.forEach((row,rowIndex) => row.forEach((block, columnIndex) => block && (block.position = { row: rowIndex, column: columnIndex })));
+          return newSlots;
+        });
+      }, 500);
+    }
+  }, [slots]);
 
   return <div className={classNames({
     'tetris-board': true,
