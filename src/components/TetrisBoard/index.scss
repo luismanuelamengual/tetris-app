@@ -1,4 +1,14 @@
 $backgroundColor: black;
+$blockGradientAngle: 135deg;
+$blockGradientLightningPercentage: 15%;
+$blockIColor: rgb(255, 40, 40);
+$blockJColor: rgb(80, 80, 255);
+$blockLColor: rgb(209, 150, 0);
+$blockOColor: rgb(207, 207, 6);
+$blockSColor: rgb(162, 29, 207);
+$blockZColor: rgb(35, 184, 22);
+$blockTColor: rgb(21, 168, 173);
+$blockInactiveColor: rgb(128, 128, 128);
 
 .tetris-board {
   position: relative;
@@ -13,52 +23,51 @@ $backgroundColor: black;
     box-sizing: border-box;
   }
 
-  &.tetris-board-finished {
-    .block {
-      background: rgb(158,158,158) !important;
-      background: linear-gradient(135deg, rgba(158,158,158,1) 0%, rgba(113,113,113,1) 100%) !important;
-    }
-  }
-
   .block {
     position: absolute;
     border-style: outset;
     border-width: 3px;
-    border-color: rgba(0,0,0,0.5);
 
     &.block-i {
-      background: rgb(255,83,83);
-      background: linear-gradient(137deg, rgba(255,83,83,1) 0%, rgba(255,27,27,1) 100%);
+      background: $blockIColor;
+      background: linear-gradient($blockGradientAngle, $blockIColor, lighten($blockIColor, $blockGradientLightningPercentage), $blockIColor);
+      border-color: $blockIColor;
     }
 
     &.block-j {
-      background: rgb(83,176,255);
-      background: linear-gradient(137deg, rgba(83,176,255,1) 0%, rgba(27,150,255,1) 100%);
+      background: $blockJColor;
+      background: linear-gradient($blockGradientAngle, $blockJColor, lighten($blockJColor, $blockGradientLightningPercentage), $blockJColor);
+      border-color: $blockJColor;
     }
 
     &.block-l {
-      background: rgb(255,161,83);
-      background: linear-gradient(137deg, rgba(255,161,83,1) 0%, rgba(255,145,27,1) 100%);
+      background: $blockLColor;
+      background: linear-gradient($blockGradientAngle, $blockLColor, lighten($blockLColor, $blockGradientLightningPercentage), $blockLColor);
+      border-color: $blockLColor;
     }
 
     &.block-o {
-      background: rgb(255,253,83);
-      background: linear-gradient(137deg, rgba(255,253,83,1) 0%, rgba(254,255,27,1) 100%);
+      background: $blockOColor;
+      background: linear-gradient($blockGradientAngle, $blockOColor, lighten($blockOColor, $blockGradientLightningPercentage), $blockOColor);
+      border-color: $blockOColor;
     }
 
     &.block-s {
-      background: rgb(255,83,225);
-      background: linear-gradient(137deg, rgba(255,83,225,1) 0%, rgba(255,27,219,1) 100%);
+      background: $blockSColor;
+      background: linear-gradient($blockGradientAngle, $blockSColor, lighten($blockSColor, $blockGradientLightningPercentage), $blockSColor);
+      border-color: $blockSColor;
     }
 
     &.block-z {
-      background: rgb(130,255,83);
-      background: linear-gradient(137deg, rgba(130,255,83,1) 0%, rgba(81,255,27,1) 100%);
+      background: $blockZColor;
+      background: linear-gradient($blockGradientAngle, $blockZColor, lighten($blockZColor, $blockGradientLightningPercentage), $blockZColor);
+      border-color: $blockZColor;
     }
 
     &.block-t {
-      background: rgb(83,255,244);
-      background: linear-gradient(82deg, rgba(83,255,244,1) 0%, rgba(27,246,255,1) 100%);
+      background: $blockTColor;
+      background: linear-gradient($blockGradientAngle, $blockTColor, lighten($blockTColor, $blockGradientLightningPercentage), $blockTColor);
+      border-color: $blockTColor;
     }
 
     @for $x from 1 through 10 {
@@ -74,5 +83,13 @@ $backgroundColor: black;
         bottom: percentage((20 - $y) / 20);
       }
     }
-  } 
+  }
+  
+  &.tetris-board-finished {
+    .block {
+      background: $blockInactiveColor;
+      background: linear-gradient($blockGradientAngle, $blockInactiveColor, lighten($blockInactiveColor, $blockGradientLightningPercentage), $blockInactiveColor);
+      border-color: $blockInactiveColor;
+    }
+  }
 }
