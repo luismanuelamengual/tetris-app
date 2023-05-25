@@ -15,7 +15,20 @@ $backgroundColor: black;
 
   .block {
     position: absolute;
-    background-color: red; 
+    background-color: gray; 
+    border-style: outset;
+    border-width: 3px;
+    border-color: rgba(0,0,0,0.5);
+
+    &.block-i {
+      background: rgb(255,83,83);
+      background: linear-gradient(137deg, rgba(255,83,83,1) 0%, rgba(255,27,27,1) 100%);
+    }
+
+    &.block-j {
+      background: rgb(83,176,255);
+      background: linear-gradient(137deg, rgba(83,176,255,1) 0%, rgba(27,150,255,1) 100%);
+    }
 
     @for $x from 1 through 10 {
       &.x#{$x} {
