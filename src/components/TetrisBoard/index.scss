@@ -50,6 +50,11 @@ $backgroundColor: black;
       background: linear-gradient(137deg, rgba(130,255,83,1) 0%, rgba(81,255,27,1) 100%);
     }
 
+    &.block-t {
+      background: rgb(83,255,244);
+      background: linear-gradient(82deg, rgba(83,255,244,1) 0%, rgba(27,246,255,1) 100%);
+    }
+
     @for $x from 1 through 10 {
       &.x#{$x} {
         left: percentage(($x - 1) / 10);

@@ -51,11 +51,22 @@ export const ZTetrominoType: TetrominoType = {
   ]
 };
 
+export const TTetrominoType: TetrominoType = {
+  blockType: BlockType.T,
+  shapeOffsets: [
+    [[-1, 0], [0, 0], [1, 0], [0, 1]],
+    [[0, -1], [0, 0], [0, 1], [-1, 0]],
+    [[1, 0], [0, 0], [-1, 0], [0, -1]],
+    [[0, 1], [0, 0], [0, -1], [1, 0]]
+  ]
+};
+
 export const TetrominoTypes: Array<TetrominoType> = [
   ITetrominoType,
   JTetrominoType,
   LTetrominoType,
   OTetrominoType,
   STetrominoType,
-  ZTetrominoType
+  ZTetrominoType,
+  TTetrominoType
 ];
