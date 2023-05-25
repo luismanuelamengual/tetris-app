@@ -233,6 +233,7 @@ export function TetrisBoard({
 
   return <div className={classNames({
     'tetris-board': true,
+    'tetris-board-finished': isGameOver,
     [className]: !!className
   })}>
     {renderTetrominoBlocks()}

@@ -13,9 +13,15 @@ $backgroundColor: black;
     box-sizing: border-box;
   }
 
+  &.tetris-board-finished {
+    .block {
+      background: rgb(158,158,158) !important;
+      background: linear-gradient(135deg, rgba(158,158,158,1) 0%, rgba(113,113,113,1) 100%) !important;
+    }
+  }
+
   .block {
     position: absolute;
-    background-color: gray; 
     border-style: outset;
     border-width: 3px;
     border-color: rgba(0,0,0,0.5);
