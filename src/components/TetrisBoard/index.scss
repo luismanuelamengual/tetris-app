@@ -10,6 +10,11 @@ $blockZColor: rgb(35, 184, 22);
 $blockTColor: rgb(21, 168, 173);
 $blockInactiveColor: rgb(128, 128, 128);
 
+@keyframes shine { 
+  0% {transform:translateX(-100%) translateY(-100%) rotate(30deg);}
+	100% {transform:translateX(100%) translateY(100%) rotate(30deg);}
+}
+
 .tetris-board {
   position: relative;
   border: 2px solid red;
@@ -27,7 +32,29 @@ $blockInactiveColor: rgb(128, 128, 128);
     position: absolute;
     border-style: outset;
     border-width: 3px;
-
+   
+    &.block-flashing {
+      overflow: hidden;
+      
+      &:after {
+        content: '';
+        top: 0;
+        transform: translateX(100%) rotate(30deg);
+        width: 300%;
+        height: 300%;
+        position: absolute;
+        z-index: 1;
+        animation: shine 1.5s ease-in forwards;
+        animation-play-state: running;
+        background:
+          linear-gradient( to right, 
+            rgba(255,255,255,0) 0%,
+            rgba(255,255,255,0.8) 50%,
+            rgba(128,186,232,0) 99%,
+            rgba(128,186,232,0) 100%);
+      }
+    }
+    
     &.block-i {
       background: $blockIColor;
       background: linear-gradient($blockGradientAngle, $blockIColor, lighten($blockIColor, $blockGradientLightningPercentage), $blockIColor);

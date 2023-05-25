@@ -20,7 +20,8 @@ export function TetrisBoard({
   const [slots, setSlots] = useState<Array<Array<Block | null>>>(Array.from({ length: 20 }, () => Array(10).fill(null)));
   const [tetrominoBlocks, setTetrominoBlocks] = useState<Array<Block>>([]);
   const [tetromino, setTetromino] = useState<Tetromino | null>(null);
-  const [isGameOver, setIsGameOver] = useState(false);
+  const [isGameOver, setIsGameOver] = useState<boolean>(false);
+  const [blocksFlashing, setBlocksFlashing] = useState<boolean>(false);
   const [acceleratorPressed, setAcceleratorPressed] = useState<boolean>(false);
   const blockCounter = useRef<number>(0);
   const executeGameTickRef = useRef<any>();
@@ -135,11 +136,12 @@ export function TetrisBoard({
   const renderBlock = useCallback((block: Block) => {
     return (<div className={classNames({
       'block': true,
+      'block-flashing': blocksFlashing,
       [`block-${block.type}`]: true,
       [`x${block.position.column + 1}`]: true,
       [`y${block.position.row + 1}`]: true,
     })} key={block.id}/>);
-  }, []);
+  }, [blocksFlashing]);
 
   const renderBlocks = useCallback(() => {
     return slots.map((row) => row.map((cell) => cell ? renderBlock(cell) : null));
@@ -189,6 +191,17 @@ export function TetrisBoard({
       window.removeEventListener('keyup', onKeyUp);
     };
   }, [onKeyDown, onKeyUp]);
+
+  useEffect(() => {
+    let task: any = null;
+    task = setInterval(() => {
+      setBlocksFlashing(true);
+      setTimeout(() => {
+        setBlocksFlashing(false);
+      }, 1500);
+    }, 5000);
+    return () => clearInterval(task);
+  }, []);
 
   useEffect(() => {
     if (tetromino === null) {
