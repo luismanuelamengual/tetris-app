@@ -4,4 +4,5 @@ export interface Block {
   id: number;
   type: BlockType;
   position: Position;
+  removed: boolean;
 }

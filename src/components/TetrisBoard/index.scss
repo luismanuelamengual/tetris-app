@@ -45,7 +45,7 @@ $blockInactiveColor: rgb(128, 128, 128);
         height: 300%;
         position: absolute;
         z-index: 1;
-        animation: shine 1.5s ease-in forwards;
+        animation: shine 0.5s ease-in forwards;
         animation-play-state: running;
         background:
           linear-gradient( to right, 
