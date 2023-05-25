@@ -8,6 +8,17 @@ export const ITetrominoType: TetrominoType = {
   ]
 };
 
+export const JTetrominoType: TetrominoType = {
+  blockType: BlockType.J,
+  shapeOffsets: [
+    [[-1, 0], [0, 0], [1, 0], [1, 1]],
+    [[0, -1], [0, 0], [0, 1], [-1, 1]],
+    [[1, 0], [0, 0], [-1, 0], [-1, -1]],
+    [[0, 1], [0, 0], [0, -1], [1, -1]]
+  ]
+};
+
 export const TetrominoTypes: Array<TetrominoType> = [
-  ITetrominoType
+  ITetrominoType,
+  JTetrominoType
 ];

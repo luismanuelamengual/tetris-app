@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { Block, BlockType, ITetrominoType, KeyboardControls, Position, Tetromino } from 'models';
+import { Block, BlockType, KeyboardControls, Position, Tetromino, TetrominoTypes } from 'models';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import './index.scss';
 
@@ -35,6 +35,22 @@ export function TetrisBoard({
       .filter(position => position.row >= 0)
       .every(isAvailableSlot);
   }, [isAvailableSlot]);
+
+  const spawnTetromino = useCallback((): boolean => {
+    const tetrominoType = TetrominoTypes[Math.floor(Math.random() * TetrominoTypes.length)];
+    const tetrominoRotationIndex = Math.floor(Math.random() * tetrominoType.shapeOffsets.length);
+    const newTetromino = {
+      type: tetrominoType,
+      position: { column: 4, row: 0 },
+      rotationIndex: tetrominoRotationIndex
+    };
+    let tetrominoSpawned = false;
+    if (isValidTetromino(newTetromino)) {
+      setTetromino(newTetromino);
+      tetrominoSpawned = true;
+    }
+    return tetrominoSpawned;
+  }, [isValidTetromino]);
 
   const moveTetrominoLeft = useCallback((): boolean => {
     let success = false;
@@ -136,14 +152,7 @@ export function TetrisBoard({
   const executeGameTick = useCallback(() => {
     if (!isGameOver) {
       if (tetromino === null) {
-        const newTetromino = {
-          type: ITetrominoType,
-          position: { column: 4, row: 0 },
-          rotationIndex: 0
-        };
-        if (isValidTetromino(newTetromino)) {
-          setTetromino(newTetromino);
-        } else {
+        if (!spawnTetromino()) {
           setIsGameOver(true);
         }
       } else {
