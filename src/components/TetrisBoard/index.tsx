@@ -240,11 +240,15 @@ export function TetrisBoard({
   }, [slots]);
 
   return <div className={classNames({
-    'tetris-board': true,
-    'tetris-board-finished': isGameOver,
+    'tetris-panel': true,
     [className]: !!className
   })}>
-    {renderTetrominoBlocks()}
-    {renderBlocks()}
+    <div className={classNames({
+      'tetris-board': true,
+      'tetris-board-finished': isGameOver
+    })}>
+      {renderTetrominoBlocks()}
+      {renderBlocks()}
+    </div>
   </div>;
 }
