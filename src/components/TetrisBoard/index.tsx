@@ -19,6 +19,7 @@ export function TetrisBoard({
 }: Props) {
   const [slots, setSlots] = useState<Array<Array<Block | null>>>(Array.from({ length: 20 }, () => Array(10).fill(null)));
   const [tetrominoBlocks, setTetrominoBlocks] = useState<Array<Block>>([]);
+  const [nextTetromino, setNextTetromino] = useState<Tetromino | null>(null);
   const [tetromino, setTetromino] = useState<Tetromino | null>(null);
   const [isGameOver, setIsGameOver] = useState<boolean>(false);
   const [acceleratorPressed, setAcceleratorPressed] = useState<boolean>(false);
@@ -36,21 +37,34 @@ export function TetrisBoard({
       .every(isAvailableSlot);
   }, [isAvailableSlot]);
 
-  const spawnTetromino = useCallback((): boolean => {
+  const createTetromino = useCallback((): Tetromino => {
     const tetrominoType = TetrominoTypes[Math.floor(Math.random() * TetrominoTypes.length)];
     const tetrominoRotationIndex = Math.floor(Math.random() * tetrominoType.shapeOffsets.length);
-    const newTetromino = {
+    return {
       type: tetrominoType,
       position: { column: 4, row: 0 },
       rotationIndex: tetrominoRotationIndex
     };
+  }, []);
+
+  const spawnTetromino = useCallback((): boolean => {
     let tetrominoSpawned = false;
-    if (isValidTetromino(newTetromino)) {
-      setTetromino(newTetromino);
-      tetrominoSpawned = true;
+    if (nextTetromino !== null) {
+      if (isValidTetromino(nextTetromino)) {
+        setNextTetromino(createTetromino());
+        setTetromino(nextTetromino);
+        tetrominoSpawned = true;
+      }
+    } else {
+      const newTetromino = createTetromino();
+      if (isValidTetromino(newTetromino)) {
+        setNextTetromino(createTetromino());
+        setTetromino(newTetromino);
+        tetrominoSpawned = true;
+      }
     }
     return tetrominoSpawned;
-  }, [isValidTetromino]);
+  }, [nextTetromino, isValidTetromino]);
 
   const moveTetrominoLeft = useCallback((): boolean => {
     let success = false;
