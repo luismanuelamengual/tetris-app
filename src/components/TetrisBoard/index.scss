@@ -12,10 +12,89 @@ $blockZColor: rgb(35, 184, 22);
 $blockTColor: rgb(21, 168, 173);
 $blockInactiveColor: rgb(128, 128, 128);
 $blockSize: 30px;
+$blockSpacing: 2px;
+$nextTetrominoPanelSize: 140px;
 
 @keyframes shine { 
   0% {transform:translateX(-100%) translateY(-100%) rotate(30deg);}
 	100% {transform:translateX(100%) translateY(100%) rotate(30deg);}
+}
+
+.block {
+  border-style: outset;
+  border-width: 3px;
+  border-radius: 5px;
+  width: $blockSize;
+  height: $blockSize;
+  overflow: hidden;
+
+  &.block-flashing {
+    &:after {
+      content: '';
+      top: 0;
+      transform: translateX(100%) rotate(30deg);
+      width: 300%;
+      height: 300%;
+      position: absolute;
+      z-index: 1;
+      animation: shine 0.5s ease-in forwards;
+      animation-play-state: running;
+      background:
+        linear-gradient( to right, 
+          rgba(255,255,255,0) 0%,
+          rgba(255,255,255,0.8) 50%,
+          rgba(128,186,232,0) 99%,
+          rgba(128,186,232,0) 100%);
+    }
+  }
+  
+  &.block-disabled {
+    background: $blockInactiveColor;
+    background: linear-gradient($blockGradientAngle, $blockInactiveColor, lighten($blockInactiveColor, $blockGradientLightningPercentage), $blockInactiveColor);
+    border-color: lighten($blockInactiveColor, $blockBorderLightningPercentage);
+  }
+
+  &.block-i {
+    background: $blockIColor;
+    background: linear-gradient($blockGradientAngle, $blockIColor, lighten($blockIColor, $blockGradientLightningPercentage), $blockIColor);
+    border-color: lighten($blockIColor, $blockBorderLightningPercentage);
+  }
+
+  &.block-j {  
+    background: $blockJColor;
+    background: linear-gradient($blockGradientAngle, $blockJColor, lighten($blockJColor, $blockGradientLightningPercentage), $blockJColor);
+    border-color: lighten($blockJColor, $blockBorderLightningPercentage);
+  }
+
+  &.block-l {
+    background: $blockLColor;
+    background: linear-gradient($blockGradientAngle, $blockLColor, lighten($blockLColor, $blockGradientLightningPercentage), $blockLColor);
+    border-color: lighten($blockLColor, $blockBorderLightningPercentage);
+  }
+
+  &.block-o {
+    background: $blockOColor;
+    background: linear-gradient($blockGradientAngle, $blockOColor, lighten($blockOColor, $blockGradientLightningPercentage), $blockOColor);
+    border-color: lighten($blockOColor, $blockBorderLightningPercentage);
+  }
+
+  &.block-s {
+    background: $blockSColor;
+    background: linear-gradient($blockGradientAngle, $blockSColor, lighten($blockSColor, $blockGradientLightningPercentage), $blockSColor);
+    border-color: lighten($blockSColor, $blockBorderLightningPercentage);
+  }
+
+  &.block-z {
+    background: $blockZColor;
+    background: linear-gradient($blockGradientAngle, $blockZColor, lighten($blockZColor, $blockGradientLightningPercentage), $blockZColor);
+    border-color: lighten($blockZColor, $blockBorderLightningPercentage);
+  }
+
+  &.block-t {
+    background: $blockTColor;
+    background: linear-gradient($blockGradientAngle, $blockTColor, lighten($blockTColor, $blockGradientLightningPercentage), $blockTColor);
+    border-color: lighten($blockTColor, $blockBorderLightningPercentage);
+  }
 }
 
 .tetris-panel {
@@ -26,138 +105,64 @@ $blockSize: 30px;
   flex-direction: row;
   gap: 20px;
 
-  .block {
-    position: absolute;
-    border-style: outset;
-    border-width: 3px;
-    border-radius: 5px;
-    margin: 1px;
-   
-    &.block-flashing {
-      overflow: hidden;
-      
-      &:after {
-        content: '';
-        top: 0;
-        transform: translateX(100%) rotate(30deg);
-        width: 300%;
-        height: 300%;
-        position: absolute;
-        z-index: 1;
-        animation: shine 0.5s ease-in forwards;
-        animation-play-state: running;
-        background:
-          linear-gradient( to right, 
-            rgba(255,255,255,0) 0%,
-            rgba(255,255,255,0.8) 50%,
-            rgba(128,186,232,0) 99%,
-            rgba(128,186,232,0) 100%);
-      }
-    }
-    
-    &.block-i {
-      background: $blockIColor;
-      background: linear-gradient($blockGradientAngle, $blockIColor, lighten($blockIColor, $blockGradientLightningPercentage), $blockIColor);
-      border-color: lighten($blockIColor, $blockBorderLightningPercentage);
-    }
-
-    &.block-j {
-      background: $blockJColor;
-      background: linear-gradient($blockGradientAngle, $blockJColor, lighten($blockJColor, $blockGradientLightningPercentage), $blockJColor);
-      border-color: lighten($blockJColor, $blockBorderLightningPercentage);
-    }
-
-    &.block-l {
-      background: $blockLColor;
-      background: linear-gradient($blockGradientAngle, $blockLColor, lighten($blockLColor, $blockGradientLightningPercentage), $blockLColor);
-      border-color: lighten($blockLColor, $blockBorderLightningPercentage);
-    }
-
-    &.block-o {
-      background: $blockOColor;
-      background: linear-gradient($blockGradientAngle, $blockOColor, lighten($blockOColor, $blockGradientLightningPercentage), $blockOColor);
-      border-color: lighten($blockOColor, $blockBorderLightningPercentage);
-    }
-
-    &.block-s {
-      background: $blockSColor;
-      background: linear-gradient($blockGradientAngle, $blockSColor, lighten($blockSColor, $blockGradientLightningPercentage), $blockSColor);
-      border-color: lighten($blockSColor, $blockBorderLightningPercentage);
-    }
-
-    &.block-z {
-      background: $blockZColor;
-      background: linear-gradient($blockGradientAngle, $blockZColor, lighten($blockZColor, $blockGradientLightningPercentage), $blockZColor);
-      border-color: lighten($blockZColor, $blockBorderLightningPercentage);
-    }
-
-    &.block-t {
-      background: $blockTColor;
-      background: linear-gradient($blockGradientAngle, $blockTColor, lighten($blockTColor, $blockGradientLightningPercentage), $blockTColor);
-      border-color: lighten($blockTColor, $blockBorderLightningPercentage);
-    }
+  * {
+    box-sizing: border-box;
   }
 
-  .tetris-board {
+  .tetris-grid {
     position: relative;
     border: 2px inset;
     box-sizing: border-box;
     background-color: $backgroundColor;
     overflow: hidden;
-    width: $blockSize * 10;
-    aspect-ratio: 0.5;
     border-radius: 8px;
     border-color: $panelBackgroundColor;
-    
-    * {
-      box-sizing: border-box;
-    }
-  
+    display: grid;
+    grid-template-columns: repeat(10, $blockSize);
+    grid-template-rows: repeat(20, $blockSize);
+    gap: $blockSpacing; 
+
     @for $x from 1 through 10 {
       .x#{$x} {
-        left: percentage(($x - 1) / 10);
-        right: percentage((10 - $x) / 10);
+        grid-column: $x;
       }
     }
   
     @for $y from 1 through 20 {
       .y#{$y} {
-        top: percentage((($y - 1)) / 20);
-        bottom: percentage((20 - $y) / 20);
-      }
-    }
-    
-    &.tetris-board-finished {
-      .block {
-        background: $blockInactiveColor;
-        background: linear-gradient($blockGradientAngle, $blockInactiveColor, lighten($blockInactiveColor, $blockGradientLightningPercentage), $blockInactiveColor);
-        border-color: lighten($blockInactiveColor, $blockBorderLightningPercentage);;
+        grid-row: $y;
       }
     }
   }
 
   .tetris-data-panel {
-    .tetris-next-tetromino-grid {
+    .tetris-next-tetromino-panel {
       position: relative;
       border: 2px inset;
       box-sizing: border-box;
-      width: $blockSize * 4;
-      aspect-ratio: 1;
       background-color: $backgroundColor;
       border-radius: 8px;
       border-color: $panelBackgroundColor;
+      width: $nextTetrominoPanelSize;
+      height: $nextTetrominoPanelSize;
+      display: flex;
+      justify-content: center;
+      align-items: center;
 
-      @for $x from 1 through 4 {
-        .x#{$x} {
-          left: percentage(($x - 1) / 4);
-          right: percentage((4 - $x) / 4);
+      .tetris-next-tetromino-grid {
+        display: grid;
+        gap: $blockSpacing; 
+
+        @for $x from 1 through 4 {
+          .x#{$x} {
+            grid-column: $x;
+          }
         }
-      }
-    
-      @for $y from 1 through 4 {
-        .y#{$y} {
-          top: percentage((($y - 1)) / 4);
-          bottom: percentage((4 - $y) / 4);
+      
+        @for $y from 1 through 4 {
+          .y#{$y} {
+            grid-row: $y;
+          }
         }
       }
     }

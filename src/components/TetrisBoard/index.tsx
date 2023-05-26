@@ -165,15 +165,26 @@ export function TetrisBoard({
   }, [tetrominoBlocks, renderBlock]);
 
   const renderNextTetromino = useCallback(() => {
+    if (!nextTetromino) { return null; }
+    const blockOffsets = nextTetromino.type.shapeOffsets[nextTetromino.rotationIndex];
+    let normalizedBlockOffsets = [...blockOffsets];
+    const minColumnOffset = Math.min(...normalizedBlockOffsets.map(offset => offset[0]));
+    if (minColumnOffset < 0) {
+      normalizedBlockOffsets = normalizedBlockOffsets.map(offset => [offset[0] - minColumnOffset, offset[1]]);
+    }
+    const minRowOffset = Math.min(...normalizedBlockOffsets.map(offset => offset[1]));
+    if (minRowOffset < 0) {
+      normalizedBlockOffsets = normalizedBlockOffsets.map(offset => [offset[0], offset[1] - minRowOffset]);
+    }
     return (
-      <>
-        {nextTetromino !== null && nextTetromino.type.shapeOffsets[nextTetromino.rotationIndex].map(([columnOffset, rowOffset], index) => renderBlock({
+      <div className='tetris-next-tetromino-grid'>
+        {normalizedBlockOffsets.map(([column, row], index) => renderBlock({
           id: -index - 1,
-          position: { column: 1 + columnOffset, row: 1 + rowOffset },
+          position: { column, row },
           type: nextTetromino.type.blockType,
           removed: false
         }))}
-      </>
+      </div>
     );
   }, [nextTetromino, renderBlock]);
 
@@ -270,20 +281,15 @@ export function TetrisBoard({
     'tetris-panel': true,
     [className]: !!className
   })}>
-    <div className={classNames({
-      'tetris-board': true,
-      'tetris-board-finished': isGameOver
+    <div className={classNames({'tetris-grid': true
     })}>
       {renderTetrominoBlocks()}
       {renderBlocks()}
     </div>
 
-    <div className={classNames({
-      'tetris-data-panel': true,
+    <div className={classNames({'tetris-data-panel': true,
     })}>
-      <div className={classNames({
-        'tetris-next-tetromino-grid': true
-      })}>
+      <div className={classNames({'tetris-next-tetromino-panel': true})}>
         {renderNextTetromino()}
       </div>
     </div>
