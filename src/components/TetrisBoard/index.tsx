@@ -250,5 +250,10 @@ export function TetrisBoard({
       {renderTetrominoBlocks()}
       {renderBlocks()}
     </div>
+
+    <div className={classNames({
+      'tetris-data-panel': true,
+    })}>
+    </div>
   </div>;
 }

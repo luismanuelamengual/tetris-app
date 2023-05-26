@@ -1,11 +1,11 @@
 $backgroundColor: black;
-$panelBackgroundColor: #425BA2;
+$panelBackgroundColor: rgba(66,91,162, 0.5);;
 $blockGradientAngle: 135deg;
 $blockGradientLightningPercentage: 15%;
 $blockBorderLightningPercentage: 0%;
 $blockIColor: rgb(255, 40, 40);
 $blockJColor: rgb(80, 80, 255);
-$blockLColor: rgb(209, 150, 0);
+$blockLColor: rgb(237, 120, 32);
 $blockOColor: rgb(207, 207, 6);
 $blockSColor: rgb(162, 29, 207);
 $blockZColor: rgb(35, 184, 22);
@@ -21,6 +21,8 @@ $blockInactiveColor: rgb(128, 128, 128);
   background-color: $panelBackgroundColor;
   border-radius: 15px;
   padding: 20px;
+  display: flex;
+  flex-direction: row;
 
   .tetris-board {
     position: relative;
@@ -41,7 +43,7 @@ $blockInactiveColor: rgb(128, 128, 128);
       position: absolute;
       border-style: outset;
       border-width: 3px;
-      border-radius: 2px;
+      border-radius: 5px;
       margin: 1px;
      
       &.block-flashing {
@@ -130,5 +132,9 @@ $blockInactiveColor: rgb(128, 128, 128);
         border-color: lighten($blockInactiveColor, $blockBorderLightningPercentage);;
       }
     }
+  }
+
+  .tetris-data-panel {
+    width: 150px;
   }
 }
