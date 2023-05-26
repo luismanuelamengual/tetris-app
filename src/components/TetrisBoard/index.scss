@@ -21,6 +21,7 @@ $nextTetrominoPanelSize: 140px;
 }
 
 .block {
+  position: relative;
   border-style: outset;
   border-width: 3px;
   border-radius: 5px;

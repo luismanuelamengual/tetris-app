@@ -147,12 +147,16 @@ export function TetrisBoard({
   }, []);
 
   const renderBlock = useCallback((block: Block) => {
+    const { column, row } = block.position;
+    if (row < 0 || row >= 20 || column < 0 || column >= 10) {
+      return null;
+    }
     return (<div className={classNames({
       'block': true,
       'block-flashing': block.removed,
       [`block-${block.type}`]: true,
-      [`x${block.position.column + 1}`]: true,
-      [`y${block.position.row + 1}`]: true,
+      [`x${column + 1}`]: true,
+      [`y${row + 1}`]: true,
     })} key={block.id}/>);
   }, []);
 
