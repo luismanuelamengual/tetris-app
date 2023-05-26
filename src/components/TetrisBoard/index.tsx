@@ -29,6 +29,7 @@ export function TetrisBoard({
   const [acceleratorPressed, setAcceleratorPressed] = useState<boolean>(false);
   const [levelPointsCounter, setLevelPointsCounter] = useState<number>(0);
   const [level, setLevel] = useState<number>(0);
+  const [lines, setLines] = useState<number>(0);
   const blockCounter = useRef<number>(0);
   const executeGameTickRef = useRef<any>();
 
@@ -281,6 +282,7 @@ export function TetrisBoard({
     if (linesMarked > 0) {
       setSlots(slotsMarked);
       setTimeout(() => {
+        setLines(lines => lines + linesMarked);
         setLevelPointsCounter(points => points + linesMarked);
         setSlots((previousSlots) => {
           const newSlots = [...previousSlots];
@@ -318,6 +320,10 @@ export function TetrisBoard({
       <div className='tetris-field'>
         <div className='label'>LEVEL</div>
         <div className='value'>{level + 1}</div>
+      </div>
+      <div className='tetris-field'>
+        <div className='label'>LINES</div>
+        <div className='value'>{lines}</div>
       </div>
     </div>
   </div>;
