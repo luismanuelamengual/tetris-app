@@ -49,12 +49,6 @@ $nextTetrominoPanelSize: 140px;
     }
   }
   
-  &.block-disabled {
-    background: $blockInactiveColor;
-    background: linear-gradient($blockGradientAngle, $blockInactiveColor, lighten($blockInactiveColor, $blockGradientLightningPercentage), $blockInactiveColor);
-    border-color: lighten($blockInactiveColor, $blockBorderLightningPercentage);
-  }
-
   &.block-i {
     background: $blockIColor;
     background: linear-gradient($blockGradientAngle, $blockIColor, lighten($blockIColor, $blockGradientLightningPercentage), $blockIColor);
@@ -95,6 +89,12 @@ $nextTetrominoPanelSize: 140px;
     background: $blockTColor;
     background: linear-gradient($blockGradientAngle, $blockTColor, lighten($blockTColor, $blockGradientLightningPercentage), $blockTColor);
     border-color: lighten($blockTColor, $blockBorderLightningPercentage);
+  }
+
+  &.block-disabled {
+    background: $blockInactiveColor;
+    background: linear-gradient($blockGradientAngle, $blockInactiveColor, lighten($blockInactiveColor, $blockGradientLightningPercentage), $blockInactiveColor);
+    border-color: lighten($blockInactiveColor, $blockBorderLightningPercentage);
   }
 }
 

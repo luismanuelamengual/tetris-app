@@ -154,11 +154,12 @@ export function TetrisBoard({
     return (<div className={classNames({
       'block': true,
       'block-flashing': block.removed,
+      'block-disabled': isGameOver,
       [`block-${block.type}`]: true,
       [`x${column + 1}`]: true,
       [`y${row + 1}`]: true,
     })} key={block.id}/>);
-  }, []);
+  }, [isGameOver]);
 
   const renderBlocks = useCallback(() => {
     return slots.map((row) => row.map((cell) => cell ? renderBlock(cell) : null));
