@@ -137,6 +137,10 @@ $nextTetrominoPanelSize: 140px;
   }
 
   .tetris-data-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
     .tetris-next-tetromino-panel {
       position: relative;
       border: 2px inset;
@@ -165,6 +169,25 @@ $nextTetrominoPanelSize: 140px;
             grid-row: $y;
           }
         }
+      }
+    }
+
+    .tetris-field {
+      .label {
+        -webkit-user-select: none; 
+        -ms-user-select: none; 
+        user-select: none; 
+        font-size: 20px;
+        font-family: 'Sigmar One';
+        text-shadow: 2px 2px black;
+        color: white;
+      }
+  
+      .value {
+        font-size: 20px;
+        font-family: 'Sigmar One';
+        text-shadow: 2px 2px black;
+        color: white;
       }
     }
   }

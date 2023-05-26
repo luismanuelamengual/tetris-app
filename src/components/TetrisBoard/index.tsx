@@ -8,6 +8,10 @@ interface Props {
   keyboardControls?: KeyboardControls;
 };
 
+const TETROMINOS_PER_LEVEL = 15;
+const ACCELERATED_INTERVAL = 50;
+const INTERVAL_PER_LEVEL = [ 1000, 900, 800, 700, 600, 500, 450, 400, 350, 300, 250, 200, 180, 160, 140, 120, 100, 80, 70, 60 ];
+
 export function TetrisBoard({
   className = '',
   keyboardControls = {
@@ -23,6 +27,8 @@ export function TetrisBoard({
   const [tetromino, setTetromino] = useState<Tetromino | null>(null);
   const [isGameOver, setIsGameOver] = useState<boolean>(false);
   const [acceleratorPressed, setAcceleratorPressed] = useState<boolean>(false);
+  const [tetrominosCounter, setTetrominosCounter] = useState<number>(0);
+  const [level, setLevel] = useState<number>(0);
   const blockCounter = useRef<number>(0);
   const executeGameTickRef = useRef<any>();
 
@@ -202,6 +208,7 @@ export function TetrisBoard({
       } else {
         if (!moveTetrominoDown()) {
           freezeTetromino();
+          setTetrominosCounter(tetrominosCounter => tetrominosCounter + 1);
         }
       }
     }
@@ -214,16 +221,22 @@ export function TetrisBoard({
   useEffect(() => {
     let task: any = null;
     if (!isGameOver) {
+      let interval = 0;
+      if (acceleratorPressed || level >= INTERVAL_PER_LEVEL.length) {
+        interval = ACCELERATED_INTERVAL;
+      } else {
+        interval = INTERVAL_PER_LEVEL[level];
+      }
       task = setInterval(() => {
         executeGameTickRef.current();
-      }, acceleratorPressed ? 50 : 1000);
+      }, interval);
     }
     return () => {
       if (task != null) {
         clearInterval(task);
       }
     };
-  }, [isGameOver, acceleratorPressed]);
+  }, [isGameOver, level, acceleratorPressed]);
 
   useEffect(() => {
     window.addEventListener('keydown', onKeyDown);
@@ -233,6 +246,12 @@ export function TetrisBoard({
       window.removeEventListener('keyup', onKeyUp);
     };
   }, [onKeyDown, onKeyUp]);
+
+  useEffect(() => {
+    if (tetrominosCounter > 0 && tetrominosCounter % TETROMINOS_PER_LEVEL === 0) {
+      setLevel(level => level + 1);
+    }
+  }, [tetrominosCounter]);
 
   useEffect(() => {
     if (tetromino === null) {
@@ -296,6 +315,10 @@ export function TetrisBoard({
     })}>
       <div className={classNames({'tetris-next-tetromino-panel': true})}>
         {renderNextTetromino()}
+      </div>
+      <div className='tetris-field'>
+        <div className='label'>LEVEL</div>
+        <div className='value'>{level + 1}</div>
       </div>
     </div>
   </div>;
