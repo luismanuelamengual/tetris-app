@@ -164,6 +164,19 @@ export function TetrisBoard({
     return tetrominoBlocks.length > 0 && tetrominoBlocks.map((block) => renderBlock(block));
   }, [tetrominoBlocks, renderBlock]);
 
+  const renderNextTetromino = useCallback(() => {
+    return (
+      <>
+        {nextTetromino !== null && nextTetromino.type.shapeOffsets[nextTetromino.rotationIndex].map(([columnOffset, rowOffset], index) => renderBlock({
+          id: -index - 1,
+          position: { column: 1 + columnOffset, row: 1 + rowOffset },
+          type: nextTetromino.type.blockType,
+          removed: false
+        }))}
+      </>
+    );
+  }, [nextTetromino, renderBlock]);
+
   const executeGameTick = useCallback(() => {
     if (!isGameOver) {
       if (tetromino === null) {
@@ -268,6 +281,11 @@ export function TetrisBoard({
     <div className={classNames({
       'tetris-data-panel': true,
     })}>
+      <div className={classNames({
+        'tetris-next-tetromino-grid': true
+      })}>
+        {renderNextTetromino()}
+      </div>
     </div>
   </div>;
 }
