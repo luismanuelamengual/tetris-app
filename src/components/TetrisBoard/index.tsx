@@ -12,10 +12,10 @@ const LEVEL_POINTS_PER_LEVEL = 20;
 const ACCELERATED_INTERVAL = 50;
 const INTERVAL_PER_LEVEL = [ 1000, 900, 800, 700, 600, 500, 450, 400, 350, 300, 250, 200, 180, 160, 140, 120, 100, 80, 70, 60 ];
 const SCORE_ACCELERATED_MOVE = 1;
-const SCORE_SINGLE_LINE = 100;
-const SCORE_DOUBLE_LINE = 300;
-const SCORE_TRIPLE_LINE = 500;
-const SCORE_TETRIS = 800;
+const SCORE_ONE_LINE_CLEARED = 100;
+const SCORE_TWO_LINES_CLEARED = 300;
+const SCORE_THREE_LINES_CLEARED = 500;
+const SCORE_FOUR_LINES_CLEARED = 800;
 
 export function TetrisBoard({
   className = '',
@@ -206,6 +206,10 @@ export function TetrisBoard({
     );
   }, [nextTetromino, renderBlock]);
 
+  const incrementScore = useCallback((scoreIncrement: number) => {
+    setScore(score => score + scoreIncrement + (scoreIncrement * (level/10)));
+  }, [level]);
+
   const executeGameTick = useCallback(() => {
     if (!isGameOver) {
       if (tetromino === null) {
@@ -215,7 +219,7 @@ export function TetrisBoard({
       } else {
         if (moveTetrominoDown()) {
           if (acceleratorPressed) {
-            setScore(score => score + level + SCORE_ACCELERATED_MOVE);
+            incrementScore(SCORE_ACCELERATED_MOVE);
           }
         } else {
           freezeTetromino();
@@ -223,7 +227,7 @@ export function TetrisBoard({
         }
       }
     }
-  }, [isGameOver, tetromino, acceleratorPressed, level, isValidTetromino, moveTetrominoDown, freezeTetromino]);
+  }, [isGameOver, tetromino, acceleratorPressed, incrementScore, isValidTetromino, moveTetrominoDown, freezeTetromino]);
 
   useEffect(() => {
     executeGameTickRef.current = executeGameTick;
@@ -295,10 +299,10 @@ export function TetrisBoard({
         setLines(lines => lines + linesMarked);
         setLevelPointsCounter(points => points + linesMarked);
         switch (linesMarked) {
-          case 1: setScore(score => score + ((level+1) * SCORE_SINGLE_LINE)); break;
-          case 2: setScore(score => score + ((level+1) * SCORE_DOUBLE_LINE)); break;
-          case 3: setScore(score => score + ((level+1) * SCORE_TRIPLE_LINE)); break;
-          case 4: setScore(score => score + ((level+1) * SCORE_TETRIS)); break;
+          case 1: incrementScore(SCORE_ONE_LINE_CLEARED); break;
+          case 2: incrementScore(SCORE_TWO_LINES_CLEARED); break;
+          case 3: incrementScore(SCORE_THREE_LINES_CLEARED); break;
+          case 4: incrementScore(SCORE_FOUR_LINES_CLEARED); break;
         }
         setSlots((previousSlots) => {
           const newSlots = [...previousSlots];
@@ -316,7 +320,7 @@ export function TetrisBoard({
         });
       }, 500);
     }
-  }, [slots]);
+  }, [slots, incrementScore]);
 
   return <div className={classNames({
     'tetris-panel': true,
@@ -343,7 +347,7 @@ export function TetrisBoard({
       </div>
       <div className='tetris-field'>
         <div className='label'>SCORE</div>
-        <div className='value'>{score}</div>
+        <div className='value'>{Math.floor(score)}</div>
       </div>
     </div>
   </div>;
