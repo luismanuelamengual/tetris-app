@@ -1,5 +1,5 @@
 $backgroundColor: black;
-$panelBackgroundColor: rgba(66,91,162, 0.5);;
+$panelBackgroundColor: rgba(0, 0, 0, 0.2);
 $blockGradientAngle: 135deg;
 $blockGradientLightningPercentage: 15%;
 $blockBorderLightningPercentage: 0%;
@@ -173,22 +173,13 @@ $nextTetrominoPanelSize: 140px;
     }
 
     .tetris-field {
-      .label {
-        -webkit-user-select: none; 
-        -ms-user-select: none; 
-        user-select: none; 
-        font-size: 20px;
-        font-family: 'Sigmar One';
-        text-shadow: 2px 2px black;
-        color: white;
-      }
-  
-      .value {
-        font-size: 20px;
-        font-family: 'Sigmar One';
-        text-shadow: 2px 2px black;
-        color: white;
-      }
+      -webkit-user-select: none; 
+      -ms-user-select: none; 
+      user-select: none; 
+      font-size: 20px;
+      font-family: 'Sigmar One';
+      text-shadow: 2px 2px black;
+      color: white;
     }
   }
 }
