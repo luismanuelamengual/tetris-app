@@ -1,5 +1,6 @@
+import { playSound } from 'actions';
 import classNames from 'classnames';
-import { Block, BlockType, KeyboardControls, Position, Tetromino, TetrominoTypes } from 'models';
+import { Block, BlockType, KeyboardControls, Position, Sound, Tetromino, TetrominoTypes } from 'models';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import './index.scss';
 
@@ -86,6 +87,8 @@ export function TetrisBoard({
       if (isValidTetromino(newTetromino)) {
         setTetromino(newTetromino);
         success = true;
+      } else {
+        playSound(Sound.ILLEGAL_MOVE);
       }
     }
     return success;
@@ -98,6 +101,8 @@ export function TetrisBoard({
       if (isValidTetromino(newTetromino)) {
         setTetromino(newTetromino);
         success = true;
+      } else {
+        playSound(Sound.ILLEGAL_MOVE);
       }
     }
     return success;
@@ -110,6 +115,8 @@ export function TetrisBoard({
       if (isValidTetromino(newTetromino)) {
         setTetromino(newTetromino);
         success = true;
+      } else {
+        playSound(Sound.ILLEGAL_MOVE);
       }
     }
     return success;
@@ -224,6 +231,9 @@ export function TetrisBoard({
         } else {
           freezeTetromino();
           setLevelPointsCounter(points => points + 1);
+          if (acceleratorPressed) {
+            playSound(Sound.HIT);
+          }
         }
       }
     }
@@ -265,6 +275,18 @@ export function TetrisBoard({
   useEffect(() => {
     setLevel(Math.max(0, Math.ceil(levelPointsCounter / LEVEL_POINTS_PER_LEVEL) - 1));
   }, [levelPointsCounter]);
+
+  useEffect(() => {
+    if (level > 0) {
+      playSound(Sound.LEVEL_UP);
+    }
+  }, [level]);
+
+  useEffect(() => {
+    if (lines > 0) {
+      playSound(Sound.CLEAR_LINE);
+    }
+  }, [lines]);
 
   useEffect(() => {
     if (tetromino === null) {
