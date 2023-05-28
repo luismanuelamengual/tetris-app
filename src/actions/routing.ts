@@ -12,3 +12,7 @@ export function goToGameRoomPage() {
 export function goToSettingsPage() {
   Router.navigate(Path.SETTINGS);
 }
+
+export function goToRankingsPage() {
+  Router.navigate(Path.RANKINGS);
+}
