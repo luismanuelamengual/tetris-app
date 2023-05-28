@@ -13,7 +13,7 @@ $blockTColor: rgb(21, 168, 173);
 $blockInactiveColor: rgb(128, 128, 128);
 $blockSize: 30px;
 $blockSpacing: 2px;
-$nextTetrominoPanelSize: 140px;
+$nextTetrominoPanelSize: ($blockSize * 4) + 20px;
 
 @keyframes shine { 
   0% {transform:translateX(-100%) translateY(-100%) rotate(30deg);}
