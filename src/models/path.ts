@@ -1,3 +1,5 @@
 export enum Path {
-  HOME = '/'
+  HOME = '/',
+  GAME_ROOM = '/game-room',
+  SETTINGS = '/settings'
 }

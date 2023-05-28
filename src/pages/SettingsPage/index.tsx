@@ -1,9 +1,9 @@
 import { Page } from 'components';
 import './index.scss';
 
-export function HomePage() {
+export function SettingsPage() {
   return (
-    <Page id='home-page'>
+    <Page id='settings-page'>
     </Page>
   );
 }
