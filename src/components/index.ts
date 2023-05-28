@@ -1,4 +1,4 @@
-export * from './TetrisBoard';
+export * from './TetrisPanel';
 export * from './Button';
 export * from './Column';
 export * from './Container';

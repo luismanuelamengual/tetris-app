@@ -18,7 +18,7 @@ const SCORE_TWO_LINES_CLEARED = 300;
 const SCORE_THREE_LINES_CLEARED = 500;
 const SCORE_FOUR_LINES_CLEARED = 800;
 
-export function TetrisBoard({
+export function TetrisPanel({
   className = '',
   keyboardControls = {
     downKeyCode: 'ArrowDown',
