@@ -1,5 +1,5 @@
 import { goToRankingsPage, goToSettingsPage } from 'actions';
-import { Button, ButtonType, Page } from 'components';
+import { Button, ButtonType, Modal, NameInput, Page } from 'components';
 import './index.scss';
 
 export function HomePage() {
@@ -9,6 +9,9 @@ export function HomePage() {
       <Button>2P VERSUS</Button>
       <Button onClick={goToRankingsPage}>RANKINGS</Button>
       <Button onClick={goToSettingsPage}>SETTINGS</Button>
+
+
+      <Modal closable={false}><NameInput /></Modal>
     </Page>
   );
 }
