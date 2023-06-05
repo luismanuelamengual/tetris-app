@@ -26,6 +26,7 @@ export function Modal({ children, open = true, onClose = undefined, className = 
   return <div className={classNames({
     'modal': true,
     'modal-open': openState,
+    'modal-closable': closable,
     [className]: !!className
   })}>
     <div className='modal-overlay' {...overlayAttributes}></div>
