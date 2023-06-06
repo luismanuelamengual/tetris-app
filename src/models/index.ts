@@ -5,6 +5,7 @@ export * from './match-result';
 export * from './music';
 export * from './path';
 export * from './position';
+export * from './ranking-slot';
 export * from './sound';
 export * from './tetrominio-types';
 export * from './tetromino';

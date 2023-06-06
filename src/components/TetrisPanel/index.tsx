@@ -1,13 +1,13 @@
 import { playSound } from 'actions';
 import classNames from 'classnames';
-import { Block, BlockType, KeyboardControls, Position, Sound, Tetromino, TetrominoTypes } from 'models';
+import { Block, BlockType, KeyboardControls, MatchResult, Position, Sound, Tetromino, TetrominoTypes } from 'models';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import './index.scss';
 
 interface Props {
   className?: string;
   keyboardControls?: KeyboardControls;
-  onGameover?: (result: { level: number, lines: number, score: number }) => void
+  onGameover?: (result: MatchResult) => void
 };
 
 const LEVEL_POINTS_PER_LEVEL = 20;

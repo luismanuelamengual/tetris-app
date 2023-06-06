@@ -1,13 +1,13 @@
-import { MatchResult } from 'models';
+import { RankingSlot } from 'models';
 import { useStore } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 import { createStore } from 'zustand/vanilla';
 
 interface RankingsStoreState  {
-  rankings: Array<MatchResult>;
+  rankings: Array<RankingSlot>;
 
-  addResult: (result: MatchResult) => void;
+  addRankingSlot: (result: RankingSlot) => void;
 }
 
 export const RankingsStore = createStore(
@@ -15,10 +15,10 @@ export const RankingsStore = createStore(
     immer<RankingsStoreState>((set) => ({
       rankings: [],
 
-      addResult(result: MatchResult) {
+      addRankingSlot(slot: RankingSlot) {
         set((state: RankingsStoreState) => {
-          state.rankings.push(result);
-          state.rankings.sort((r1, r2) => r1.score - r2.score);
+          state.rankings.push(slot);
+          state.rankings.sort((s1, s2) => s1.result.score - s2.result.score);
           state.rankings.splice(10);
         });
       }
