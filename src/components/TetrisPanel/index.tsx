@@ -7,6 +7,7 @@ import './index.scss';
 interface Props {
   className?: string;
   keyboardControls?: KeyboardControls;
+  onGameover?: (result: { level: number, lines: number, score: number }) => void
 };
 
 const LEVEL_POINTS_PER_LEVEL = 20;
@@ -25,7 +26,8 @@ export function TetrisPanel({
     leftKeyCode: 'ArrowLeft',
     rightKeyCode: 'ArrowRight',
     rotateKeyCode: 'ArrowUp'
-  }
+  },
+  onGameover = () => null
 }: Props) {
   const [slots, setSlots] = useState<Array<Array<Block | null>>>(Array.from({ length: 20 }, () => Array(10).fill(null)));
   const [tetrominoBlocks, setTetrominoBlocks] = useState<Array<Block>>([]);
@@ -238,6 +240,16 @@ export function TetrisPanel({
       }
     }
   }, [isGameOver, tetromino, acceleratorPressed, incrementScore, isValidTetromino, moveTetrominoDown, freezeTetromino]);
+
+  useEffect(() => {
+    if (isGameOver) {
+      onGameover({
+        level: level + 1,
+        lines,
+        score
+      });
+    }
+  }, [isGameOver]);
 
   useEffect(() => {
     executeGameTickRef.current = executeGameTick;
