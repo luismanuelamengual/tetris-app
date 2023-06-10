@@ -4,9 +4,11 @@ import './index.scss';
 
 interface Props {
   charactersCount?: number;
+  value?: string;
+  onChange?: ((value: string) => void) | null
 };
 
-export function NameInput({ charactersCount = 3 }: Props) {
+export function NameInput({ charactersCount = 3, value = '', onChange = null }: Props) {
   const [characters, setCharacters] = useState<Array<number>>([]);
   const [cursorIndex, setCursorIndex] = useState<number>(0);
 
@@ -72,6 +74,20 @@ export function NameInput({ charactersCount = 3 }: Props) {
       window.removeEventListener('keydown', onKeyDown);
     };
   }, [onKeyDown]);
+
+  useEffect(() => {
+    const newCharacters = [];
+    for (let i = 0; i < Math.min(value.length, charactersCount); i++) {
+      newCharacters.push(value.charCodeAt(i));
+    }
+    setCharacters(newCharacters);
+  }, [value]);
+
+  useEffect(() => {
+    if (onChange != null) {
+      onChange(String.fromCharCode.apply(null, characters));
+    }
+  }, [characters]);
 
   return <div className='name-input'>
     {renderSlots()}
